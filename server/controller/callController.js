@@ -8,26 +8,13 @@ const getCalls = async (req, res) => {
 
         connection = await connectDB();
         // daraan ORM ashiglah esul procedure bolgoj bichih
-        const result = await connection.request()
-            .input('name', sql.VarChar(30), name)
-            .input('phone', sql.VarChar(30), phone_number)
-            .query(`-- Declare variables to store the inserted IDs
-DECLARE @id INT, @id2 INT;
+        const result = await connection.request().query(`
+            select call.*,inPhone.phone_number as inPhone,outPhone.phone_number as outPhone from call 
+            left join phone as inPhone on call.number_id_in=inPhone.id
+            left join phone as outPhone  on call.number_id_out=outPhone.id`
+        );
 
--- Insert into the client table and capture the inserted ID into @InsertedID1
-INSERT INTO client (id,name)
-VALUES ((select max(id)+1 from client),@name);
-set @id=@@IDENTITY;
-
--- Insert into the phone table and capture the inserted ID into @InsertedID2
-INSERT INTO phone (id,phone_number)
-VALUES ((select max(id)+1 from phone),@phone);
-set @id2=@@IDENTITY;
--- Insert into the client_phone table using the captured IDs
-INSERT INTO client_phone (client_id, phone_id)
-VALUES ((select max(id) from client), (select max(id) from phone));`);
-
-        res.json({ message: 'client successfully created' });
+        res.json(result.recordset);
     } catch (error) {
         console.error('create client error:', error);
         res.status(500).json({ message: 'Server error' });
@@ -37,16 +24,15 @@ VALUES ((select max(id) from client), (select max(id) from phone));`);
 const createCall = async (req, res) => {
     let connection;
     try {
+        const { phone1, phone2, start, end } = req.body;
         connection = await connectDB();
-//         const result = await connection.request()
-//             .query(`
-//         select client.id,name,phone_number from client 
-// left join client_phone on client_phone.client_id=client.id
-// left join phone on client_phone.phone_id=phone.id
-//         ORDER BY client.id DESC
-//       `);
-
-      res.json({done:true});
+        const result = await connection.request()
+            .input('phoneNumber', sql.VarChar(10), phone1)
+            .input('phoneNumber2', sql.VarChar(10), phone2)
+            .input('start', sql.DateTime, start)
+            .input('end', sql.DateTime, end)
+            .query(`exec createCall @phoneNumber,@phoneNumber2,@start,@end`);
+        res.json({ done: true });
 
     } catch (error) {
         console.error('Get clients  error:', error);
@@ -57,15 +43,15 @@ const createCallBulk = async (req, res) => {
     let connection;
     try {
         connection = await connectDB();
-//         const result = await connection.request()
-//             .query(`
-//         select client.id,name,phone_number from client 
-// left join client_phone on client_phone.client_id=client.id
-// left join phone on client_phone.phone_id=phone.id
-//         ORDER BY client.id DESC
-//       `);
+        //         const result = await connection.request()
+        //             .query(`
+        //         select client.id,name,phone_number from client 
+        // left join client_phone on client_phone.client_id=client.id
+        // left join phone on client_phone.phone_id=phone.id
+        //         ORDER BY client.id DESC
+        //       `);
 
-        res.json({done:true});
+        res.json({ done: true });
     } catch (error) {
         console.error('Get clients  error:', error);
         res.status(500).json({ message: 'Server error' });

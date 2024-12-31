@@ -58,11 +58,11 @@ const data = {
           url: "/",
         },
         {
-          title: "Яриа",
+          title: "Ярианы түүх",
           url: "call",
         },
         {
-          title: "Түүх",
+          title: "Цэнэглэлт бүртгэл",
           url: "history",
         },
         {
@@ -81,7 +81,7 @@ const data = {
       icon: Bot,
       items: [
         {
-          title: "Жагсаалт",
+          title: "Хэрэглэгчийн жагсаалт",
           url: "/client",
         },
         {
@@ -171,7 +171,6 @@ const TeleSidebar = ({ ...props }) => {
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
-        {/* <NavUser user={data.user} /> */}
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

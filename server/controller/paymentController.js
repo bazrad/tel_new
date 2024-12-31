@@ -12,8 +12,7 @@ const makePayment = async (req, res) => {
             .input('amount', sql.Decimal(10, 2), amount)
             .query(`
         INSERT INTO Payments (phoneNumber, amount, paymentDate)
-        VALUES (@phoneNumber, @amount, GETDATE());
-      `);
+        VALUES (@phoneNumber, @amount, GETDATE());`);
 
         res.json({ message: 'Payment successful' });
     } catch (error) {
@@ -29,8 +28,7 @@ const getPaymentHistory = async (req, res) => {
         const result = await connection.request()
             .query(`
         SELECT * FROM Payments
-        ORDER BY paymentDate DESC
-      `);
+        ORDER BY paymentDate DESC`);
 
         res.json(result.recordset);
     } catch (error) {

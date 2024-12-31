@@ -3,7 +3,7 @@ import { Table, Card, Modal, Button, Form, Input, Select, message } from 'antd';
 import axios from 'axios';
 
 const Clients = () => {
-  const [payments, setPayments] = useState([]);
+  const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const columns = [
@@ -21,12 +21,13 @@ const Clients = () => {
 
   useEffect(() => {
 
-    fetchPayments();
+    fetchClient();
   }, []);
-  const fetchPayments = async () => {
+  const fetchClient = async () => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/client`);
-      setPayments(response.data);
+      console.log(response)
+      setClients(response.data);
     } catch (error) {
       console.error('Error fetching clients:', error);
     } finally {
@@ -40,7 +41,7 @@ const Clients = () => {
       await axios.post(`${import.meta.env.VITE_API_URL}/client`, value);
       message.success('Амжилттай  client үүслээ !');
       setIsModalVisible(false);
-      fetchPayments();
+      fetchClient();
 
     } catch (error) {
       console.log('client error:', error);
@@ -52,7 +53,7 @@ const Clients = () => {
       <Button
         type="primary"
         onClick={() => setIsModalVisible(true)}
-        className="mb-2 mr-auto ml-auto  "
+        className="mb-2 mr-auto ml-auto bg-green-400"
       >
         Хэрэглэгч нэмэх
       </Button>
@@ -81,7 +82,7 @@ const Clients = () => {
           >
             <Input />
           </Form.Item>
-          <Form.Item
+          {/* <Form.Item
             label="Хэрэглэгчийн төрөл"
             name="client_type"
             rules={[{ required: true, message: 'Төрөл сонгох хэсэг!' }]}
@@ -90,9 +91,9 @@ const Clients = () => {
               <Select.Option value={1}>Дараа төлбөрт</Select.Option>
               <Select.Option value={2}>Урьдчилсан төлбөрт</Select.Option>
             </Select>
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" className="bg-green-400">
               Нэмж турших
             </Button>
           </Form.Item>
@@ -100,7 +101,7 @@ const Clients = () => {
       </Modal>
       <Table
         columns={columns}
-        dataSource={payments}
+        dataSource={clients}
         loading={loading}
         rowKey="id"
       />

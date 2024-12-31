@@ -18,19 +18,24 @@ const Call = () => {
       key: 'division',
     },
     {
-      title: 'Хэнээс',
-      dataIndex: 'phone1',
-      key: 'phone1',
+      title: 'Дуудлага хийсэн',
+      dataIndex: 'inPhone',
+      key: 'inPhone',
     },
     {
-      title: 'Хэнд',
-      dataIndex: 'phone2',
-      key: 'phone2',
+      title: 'Дуудлага хүлээн авсан',
+      dataIndex: 'outPhone',
+      key: 'outPhone',
     },
     {
       title: 'Хугацаа',
-      dataIndex: 'duration',
-      key: 'duration',
+      dataIndex: 'duration_start',
+      key: 'duration_start',
+    },
+    {
+      title: 'Хугацаа 2',
+      dataIndex: 'duration_end',
+      key: 'duration_end',
     },
     {
       title: 'Тариф',
@@ -50,6 +55,7 @@ const Call = () => {
   const getCalls = async () => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/call`);
+      console.log(response)
       setCalls(response.data);
     } catch (error) {
       console.error('Error fetching clients:', error);
@@ -73,21 +79,27 @@ const Call = () => {
       console.log(lineArray);
       const data = lineArray.map(line => {
         const words = line.replaceAll('  ', ' ').split(" ")
+        var date1 = words[2].split('_')
+        var date2 = words[3].split('_')
         var obj = {
           phone1: words[0],
           phone2: words[1],
-          duration: words[2],
-          tariff: words[3],
-          amount: words[4]
+          start: new Date(date1[0] + ' ' + date1[1]),
+          end: new Date(date2[0] + ' ' + date2[1]),
         }
         return obj
       })
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/call/bulk`, data)
-      if (response) {
+      var succ = 0
+      for await (const call of data) {
+        const res = await axios.post(`${import.meta.env.VITE_API_URL}/call`, call)
+        if (res) succ++
+      }
+
+      if (succ === data.length) {
         notification.success({ message: "Амжилттай бүртгэгдлээ" })
         getCalls();
       }
-      message.success(`${file.name} амжилттаи татлаа!`);
+      message.success(`${file.name} амжилттай татлаа!`);
     };
 
     reader.onerror = () => {
@@ -101,12 +113,14 @@ const Call = () => {
     return false;
   };
   return (
-    <Card title="Дуудлагын мэдээлэл">
+    <Card title="Дуудлагын мэдээллүүд">
       <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-start', flexDirection: 'row' }}>
         <Button
+          className="bg-green-400"
           type="primary"
           onClick={showAddCall}
-          icon={<PhoneOutlined />}
+          icon={<PhoneOutlined />
+          }
         >
           Дуудлага бүртгэх
         </Button>
@@ -116,6 +130,7 @@ const Call = () => {
           accept='.txt' // Only accept .txt files
         >
           <Button
+            className="bg-green-400"
             type="primary"
             onClick={() => { }}
             icon={<FileTextOutlined />}
@@ -131,7 +146,7 @@ const Call = () => {
         loading={loading}
         rowKey="id"
       />
-      {addCall && <AddCallModal open={addCall} close={closeAddCall} refresh={fetchPayments} />}
+      {addCall && <AddCallModal open={addCall} close={closeAddCall} refresh={getCalls} />}
     </Card>
   );
 };
