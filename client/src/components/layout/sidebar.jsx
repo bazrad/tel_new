@@ -54,16 +54,20 @@ const data = {
       isActive: true,
       items: [
         {
+          title: "Станцын мэдээлэл",
+          url: "station",
+        },
+        {
           title: "Цэнэглэлт",
           url: "/",
         },
         {
-          title: "Ярианы түүх",
-          url: "call",
-        },
-        {
           title: "Цэнэглэлт бүртгэл",
           url: "history",
+        },
+        {
+          title: "Ярианы түүх",
+          url: "call",
         },
         {
           title: "Турших",

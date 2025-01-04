@@ -9,6 +9,7 @@ import Example from "./components/Payment/Example";
 import Example2 from "./components/Payment/Example2";
 import Clients from "./components/Client/ClientsList";
 import Call from "./components/Payment/Call";
+import Stations from "./components/Station/staionList";
 const { Content } = Layout;
 
 const App = () => {
@@ -22,6 +23,7 @@ const App = () => {
           <Route path="/example2" element={<Example2 />} />
           <Route path="/client" element={<Clients />} />
           <Route path="/call" element={<Call />} />
+          <Route path="/station" element={<Stations />} />
         </Routes>
       </Content>
     </TelLayout>

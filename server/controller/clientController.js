@@ -1,4 +1,3 @@
-const { connectDB, sql } = require('../db');
 
 const createClient = async (req, res) => {
     console.log('create client request:', req.body);

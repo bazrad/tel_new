@@ -1,4 +1,3 @@
-const { connectDB, sql } = require('../db');
 
 const getCalls = async (req, res) => {
     console.log('create client request:', req.body);
@@ -6,13 +5,8 @@ const getCalls = async (req, res) => {
     try {
         const { name, phone_number } = req.body;
 
-        connection = await connectDB();
-        // daraan ORM ashiglah esul procedure bolgoj bichih
-        const result = await connection.request().query(`
-            select call.*,inPhone.phone_number as inPhone,outPhone.phone_number as outPhone from call 
-            left join phone as inPhone on call.number_id_in=inPhone.id
-            left join phone as outPhone  on call.number_id_out=outPhone.id`
-        );
+
+        const result = await req.db.call.findAll();
 
         res.json(result.recordset);
     } catch (error) {

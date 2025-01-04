@@ -1,4 +1,3 @@
-const { connectDB, sql } = require('../db');
 
 const makePayment = async (req, res) => {
     console.log('Make payment request:', req.body);

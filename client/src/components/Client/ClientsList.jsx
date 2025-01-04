@@ -2,10 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Table, Card, Modal, Button, Form, Input, Select, message } from 'antd';
 import axios from 'axios';
 
+const { Search } = Input;
+
 const Clients = () => {
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [filteredClients, setFilteredClients] = useState([]);
+
   const columns = [
     {
       title: 'Нэр',
@@ -17,17 +21,52 @@ const Clients = () => {
       dataIndex: 'phone_number',
       key: 'phone_number',
     },
+    {
+      title: '№',
+      dataIndex: 'number',
+      key: 'number',
+    },
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    {
+      title: 'ХАЯГ',
+      dataIndex: 'address',
+      key: 'address',
+    },
+    {
+      title: 'ТӨРӨЛ',
+      dataIndex: 'type',
+      key: 'type',
+    },
+    {
+      title: 'САЛБАР НЭГЖ',
+      dataIndex: 'branch',
+      key: 'branch',
+    },
+    {
+      title: 'СТАНЦ',
+      dataIndex: 'station',
+      key: 'station',
+    },
+    {
+      title: 'ХӨНГӨЛӨЛТ',
+      dataIndex: 'discount',
+      key: 'discount',
+    },
   ];
 
   useEffect(() => {
-
     fetchClient();
   }, []);
+
   const fetchClient = async () => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/client`);
-      console.log(response)
       setClients(response.data);
+      setFilteredClients(response.data);
     } catch (error) {
       console.error('Error fetching clients:', error);
     } finally {
@@ -35,28 +74,46 @@ const Clients = () => {
     }
   };
 
+  const handleSearch = (value) => {
+    const filteredData = clients.filter((client) =>
+      ['name', 'phone_number', 'id'].some((key) =>
+        String(client[key]).toLowerCase().includes(value.toLowerCase())
+      )
+    );
+    setFilteredClients(filteredData);
+  };
+
   const handleAddClient = async (value) => {
-    console.log('value:', value);
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/client`, value);
-      message.success('Амжилттай  client үүслээ !');
+      message.success('Амжилттай хэрэглэгч үүслээ!');
       setIsModalVisible(false);
       fetchClient();
-
     } catch (error) {
       console.log('client error:', error);
       message.error('Алдаа гарлаа! Дахин оролдоно уу.');
     }
-  }
+  };
+
   return (
-    <Card title="Хэрэглэгчийн мэдээлэл">
-      <Button
-        type="primary"
-        onClick={() => setIsModalVisible(true)}
-        className="mb-2 mr-auto ml-auto bg-green-400"
-      >
-        Хэрэглэгч нэмэх
-      </Button>
+    <Card title="Хэрэглэгчийн жагсаалт">
+      <div className='flex justify-between '>
+        <Search
+          placeholder="Хайх текстээ оруулна уу"
+          className='mb-2 w-[25%]'
+          allowClear
+          enterButton="Хайх"
+          size="50px"
+          onSearch={handleSearch}
+        />
+        <Button
+          type="primary"
+          onClick={() => setIsModalVisible(true)}
+          className="mb-2 bg-green-400"
+        >
+          Хэрэглэгч нэмэх
+        </Button>
+      </div>
 
       <Modal
         title="Хэрэглэгч нэмэх"
@@ -69,29 +126,68 @@ const Clients = () => {
           onFinish={handleAddClient}
         >
           <Form.Item
-            label="Нэр"
+            label="НЭР"
             name="name"
             rules={[{ required: true, message: 'Нэрээ оруулна уу!' }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
-            label="Утасны дугаар"
+            label="УТАСНЫ ДУГААР"
             name="phone_number"
             rules={[{ required: true, message: 'Дугаараа оруулна уу!' }]}
           >
             <Input />
           </Form.Item>
-          {/* <Form.Item
-            label="Хэрэглэгчийн төрөл"
-            name="client_type"
-            rules={[{ required: true, message: 'Төрөл сонгох хэсэг!' }]}
+          <Form.Item
+            label="№"
+            name="number"
+            rules={[{ required: true, message: '№ оруулна уу!' }]}
           >
-            <Select defaultValue={2}>
-              <Select.Option value={1}>Дараа төлбөрт</Select.Option>
-              <Select.Option value={2}>Урьдчилсан төлбөрт</Select.Option>
-            </Select>
-          </Form.Item> */}
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="ID"
+            name="id"
+            rules={[{ required: true, message: 'ID оруулна уу!' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="ХАЯГ"
+            name="address"
+            rules={[{ required: true, message: 'ХАЯГ оруулна уу!' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="ТӨРӨЛ"
+            name="type"
+            rules={[{ required: true, message: 'ТӨРӨЛ оруулна уу!' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="САЛБАР НЭГЖ"
+            name="branch"
+            rules={[{ required: true, message: 'САЛБАР НЭГЖ оруулна уу!' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="СТАНЦ"
+            name="station"
+            rules={[{ required: true, message: 'СТАНЦ оруулна уу!' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="ХӨНГӨЛӨЛТ"
+            name="discount"
+            rules={[{ required: true, message: 'ХӨНГӨЛӨЛТ оруулна уу!' }]}
+          >
+            <Input />
+          </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" className="bg-green-400">
               Нэмж турших
@@ -101,7 +197,7 @@ const Clients = () => {
       </Modal>
       <Table
         columns={columns}
-        dataSource={clients}
+        dataSource={filteredClients}
         loading={loading}
         rowKey="id"
       />
