@@ -3,6 +3,7 @@ import { Table, Card, Modal, Button, Form, Input, Select, message, Upload, notif
 import axios from 'axios';
 import { FileTextOutlined, PhoneOutlined } from '@ant-design/icons';
 import AddCallModal from '../modal/addCall';
+import dayjs from 'dayjs';
 
 const Call = () => {
   const [calls, setCalls] = useState([]);
@@ -12,11 +13,6 @@ const Call = () => {
   const [fileList, setFileList] = useState([]);
 
   const columns = [
-    {
-      title: 'Хэлтэс',
-      dataIndex: 'division',
-      key: 'division',
-    },
     {
       title: 'Дуудлага хийсэн',
       dataIndex: 'number_in',
@@ -30,25 +26,32 @@ const Call = () => {
       render: e => e.phone_number
     },
     {
-      title: 'Хугацаа',
+      title: 'Эхэлсэн хугацаа',
       dataIndex: 'duration_start',
       key: 'duration_start',
+      render: e => dayjs(e).format('YYYY-MM-DD HH:mm:ss')
     },
     {
-      title: 'Хугацаа 2',
+      title: 'Дууссан хугацаа',
       dataIndex: 'duration_end',
       key: 'duration_end',
+      render: e => dayjs(e).format('YYYY-MM-DD HH:mm:ss')
     },
     {
-      title: 'Тариф',
-      dataIndex: 'tariff',
-      key: 'tariff',
+      title: 'Гарсан транк',
+      dataIndex: 'out_trunk',
+      key: 'out_trunk',
     },
     {
-      title: 'Дүн',
-      dataIndex: 'amount',
-      key: 'amount',
+      title: 'Орсон транк',
+      dataIndex: 'in_trunk',
+      key: 'in_trunk',
     },
+    // {
+    //   title: 'Дүн',
+    //   dataIndex: 'amount',
+    //   key: 'amount',
+    // },
   ];
 
   useEffect(() => {

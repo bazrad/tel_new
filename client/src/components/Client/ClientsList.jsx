@@ -26,6 +26,7 @@ const Clients = () => {
       dataIndex: 'phones',
       key: 'phones',
       render: (phones) => phones.map((phone) => phone.phone_number).join(', '),
+
     },
     {
       title: 'ХАЯГ',
@@ -43,11 +44,6 @@ const Clients = () => {
       key: 'branch',
     },
     {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
-    },
-    {
       title: 'СТАНЦ',
       dataIndex: 'station',
       key: 'station',
@@ -56,6 +52,11 @@ const Clients = () => {
       title: 'ХӨНГӨЛӨЛТ',
       dataIndex: 'discount',
       key: 'discount',
+    },
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
     },
   ];
 
@@ -78,7 +79,7 @@ const Clients = () => {
 
   const handleSearch = (value) => {
     const filteredData = clients.filter((client) =>
-      ['name', 'phone_number', 'id'].some((key) =>
+      ['name', 'address', 'phone_number', 'id'].some((key) =>
         String(client[key]).toLowerCase().includes(value.toLowerCase())
       )
     );
@@ -108,7 +109,6 @@ const Clients = () => {
           size="50px"
           onSearch={handleSearch}
         />
-
         <Button
           type="primary"
           onClick={() => setIsModalVisible(true)}
@@ -129,21 +129,6 @@ const Clients = () => {
           onFinish={handleAddClient}
         >
           <Form.Item
-            label="ID"
-            name="id"
-            rules={[{ required: true, message: 'ID оруулна уу!' }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="ХАЯГ"
-            name="address"
-            rules={[{ required: true, message: 'ХАЯГ оруулна уу!' }]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
             label="НЭР"
             name="name"
             rules={[{ required: true, message: 'Нэрээ оруулна уу!' }]}
@@ -157,20 +142,28 @@ const Clients = () => {
           >
             <Input />
           </Form.Item>
+
+          {/* <Form.Item
+            label="ID"
+            name="id"
+            rules={[{ required: true, message: 'ID оруулна уу!' }]}
+          >
+            <Input />
+          </Form.Item> */}
           <Form.Item
-            label="№"
-            name="number"
-            rules={[{ required: true, message: '№ оруулна уу!' }]}
+            label="ХАЯГ"
+            name="address"
+            rules={[{ required: true, message: 'ХАЯГ оруулна уу!' }]}
           >
             <Input />
           </Form.Item>
-          <Form.Item
+          {/* <Form.Item
             label="ТӨРӨЛ"
             name="type"
             rules={[{ required: true, message: 'ТӨРӨЛ оруулна уу!' }]}
           >
             <Input />
-          </Form.Item>
+          </Form.Item> 
           <Form.Item
             label="САЛБАР НЭГЖ"
             name="branch"
@@ -191,7 +184,7 @@ const Clients = () => {
             rules={[{ required: true, message: 'ХӨНГӨЛӨЛТ оруулна уу!' }]}
           >
             <Input />
-          </Form.Item>
+          </Form.Item>*/}
           <Form.Item>
             <Button type="primary" htmlType="submit" className="bg-green-400">
               Нэмж турших

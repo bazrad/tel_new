@@ -28,7 +28,7 @@ const PaymentHistory = () => {
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/payments/history`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/payment/history`);
         setPayments(response.data);
       } catch (error) {
         console.error('Error fetching payments:', error);

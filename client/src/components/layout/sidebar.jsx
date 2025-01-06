@@ -53,30 +53,12 @@ const data = {
       icon: SquareTerminal,
       isActive: true,
       items: [
-        {
-          title: "Станцын мэдээлэл",
-          url: "station",
-        },
-        {
-          title: "Ярианы түүх",
-          url: "call",
-        },
-        {
-          title: "Цэнэглэлт",
-          url: "/payment",
-        },
-        {
-          title: "Цэнэглэлт бүртгэл",
-          url: "history",
-        },
-        {
-          title: "Турших",
-          url: "example",
-        },
-        {
-          title: "Суурь мэдээлэл",
-          url: "example2",
-        },
+        { title: "Станцын мэдээлэл", url: "station" },
+        { title: "Ярианы түүх", url: "call" },
+        { title: "Цэнэглэлт", url: "/payment" },
+        { title: "Цэнэглэлт бүртгэл", url: "history" },
+        { title: "Турших", url: "example" },
+        { title: "Суурь мэдээлэл", url: "example2" },
       ],
     },
     {
@@ -84,18 +66,9 @@ const data = {
       url: "/",
       icon: Bot,
       items: [
-        {
-          title: "Хэрэглэгчийн жагсаалт",
-          url: "/client",
-        },
-        {
-          title: "Оруулах",
-          url: "#",
-        },
-        {
-          title: "Оруулах2",
-          url: "#",
-        },
+        { title: "Хэрэглэгчийн жагсаалт", url: "/client" },
+        { title: "Оруулах", url: "#" },
+        { title: "Оруулах2", url: "#" },
       ],
     },
     {
@@ -103,22 +76,10 @@ const data = {
       url: "#",
       icon: BookOpen,
       items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
+        { title: "Introduction", url: "#" },
+        { title: "Get Started", url: "#" },
+        { title: "Tutorials", url: "#" },
+        { title: "Changelog", url: "#" },
       ],
     },
     {
@@ -126,42 +87,19 @@ const data = {
       url: "#",
       icon: Settings2,
       items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
+        { title: "General", url: "#" },
+        { title: "Team", url: "#" },
+        { title: "Billing", url: "#" },
+        { title: "Limits", url: "#" },
       ],
     },
   ],
   projects: [
-    {
-      name: "Касс",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Бүртгэл",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Аялал",
-      url: "#",
-      icon: Map,
-    },
+    { name: "Касс", url: "#", icon: Frame },
+    { name: "Бүртгэл", url: "#", icon: PieChart },
+    { name: "Аялал", url: "#", icon: Map },
   ],
+  basename: "/login",
 };
 
 const TeleSidebar = ({ ...props }) => {
@@ -175,9 +113,12 @@ const TeleSidebar = ({ ...props }) => {
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
+        {/* Add footer content if needed */}
+        {/* If there's no footer content, this can be removed */}
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );
 };
+
 export default TeleSidebar;

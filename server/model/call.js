@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   return sequelize.define('call', {
     id: {
       autoIncrement: true,
@@ -8,11 +8,11 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true
     },
     duration_start: {
-      type: DataTypes.TIME,
+      type: DataTypes.DATE,
       allowNull: false
     },
     duration_end: {
-      type: DataTypes.TIME,
+      type: DataTypes.DATE,
       allowNull: false
     },
     number_id_in: {

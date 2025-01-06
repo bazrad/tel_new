@@ -5,13 +5,11 @@ const makePayment = async (req, res) => {
     try {
         const { phoneNumber, amount } = req.body;
 
-        connection = await connectDB();
-        const result = await connection.request()
-            .input('phoneNumber', sql.VarChar(10), phoneNumber)
-            .input('amount', sql.Decimal(10, 2), amount)
-            .query(`
-        INSERT INTO Payments (phoneNumber, amount, paymentDate)
-        VALUES (@phoneNumber, @amount, GETDATE());`);
+        const result = await req.db.Payments.create({
+            phoneNumber: phoneNumber,
+            amount: amount,
+            paymentDate: new Date()
+        })
 
         res.json({ message: 'Payment successful' });
     } catch (error) {
