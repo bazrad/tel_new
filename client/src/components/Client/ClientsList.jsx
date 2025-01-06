@@ -12,24 +12,20 @@ const Clients = () => {
 
   const columns = [
     {
+      title: '№',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    {
       title: 'Нэр',
       dataIndex: 'name',
       key: 'name',
     },
     {
       title: 'Утасны дугаар',
-      dataIndex: 'phone_number',
-      key: 'phone_number',
-    },
-    {
-      title: '№',
-      dataIndex: 'number',
-      key: 'number',
-    },
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
+      dataIndex: 'phones',
+      key: 'phones',
+      render: (phones) => phones.map((phone) => phone.phone_number).join(', '),
     },
     {
       title: 'ХАЯГ',
@@ -45,6 +41,11 @@ const Clients = () => {
       title: 'САЛБАР НЭГЖ',
       dataIndex: 'branch',
       key: 'branch',
+    },
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
     },
     {
       title: 'СТАНЦ',
@@ -65,8 +66,9 @@ const Clients = () => {
   const fetchClient = async () => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/client`);
-      setClients(response.data);
-      setFilteredClients(response.data);
+      console.log(response)
+      setClients(response.data.data);
+      setFilteredClients(response.data.data);
     } catch (error) {
       console.error('Error fetching clients:', error);
     } finally {
@@ -106,6 +108,7 @@ const Clients = () => {
           size="50px"
           onSearch={handleSearch}
         />
+
         <Button
           type="primary"
           onClick={() => setIsModalVisible(true)}
@@ -126,6 +129,21 @@ const Clients = () => {
           onFinish={handleAddClient}
         >
           <Form.Item
+            label="ID"
+            name="id"
+            rules={[{ required: true, message: 'ID оруулна уу!' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="ХАЯГ"
+            name="address"
+            rules={[{ required: true, message: 'ХАЯГ оруулна уу!' }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
             label="НЭР"
             name="name"
             rules={[{ required: true, message: 'Нэрээ оруулна уу!' }]}
@@ -143,20 +161,6 @@ const Clients = () => {
             label="№"
             name="number"
             rules={[{ required: true, message: '№ оруулна уу!' }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="ID"
-            name="id"
-            rules={[{ required: true, message: 'ID оруулна уу!' }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="ХАЯГ"
-            name="address"
-            rules={[{ required: true, message: 'ХАЯГ оруулна уу!' }]}
           >
             <Input />
           </Form.Item>

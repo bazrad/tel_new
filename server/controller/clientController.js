@@ -1,17 +1,21 @@
 
 const createClient = async (req, res) => {
     console.log('create client request:', req.body);
-    let connection;
     try {
-        const { name, phone_number } = req.body;
+        const { name, phone_number, address } = req.body;
 
-        connection = await connectDB();
-        // daraan ORM ashiglah esul procedure bolgoj bichih
-        const result = await connection.request()
-            .input('name', sql.VarChar(30), name)
-            .input('phone', sql.VarChar(30), phone_number)
-            .query(`exec createClient @name,@phone`);
-
+        const client = await req.db.client.create({
+            name,
+            address,
+            client_type_id: 1
+        })
+        const phone = await req.db.phone.create({
+            phone_number
+        })
+        const client_phone = await req.db.client_phone.create({
+            client_id: client.id,
+            phone_id: phone.id
+        })
         res.json({ message: 'client successfully created' });
     } catch (error) {
         console.error('create client error:', error);
@@ -20,17 +24,14 @@ const createClient = async (req, res) => {
 };
 
 const getAllClients = async (req, res) => {
-    let connection;
     try {
-        connection = await connectDB();
-        const result = await connection.request()
-            .query(`
-        select client.id,name,phone_number from client 
-left join client_phone on client_phone.client_id=client.id
-left join phone on client_phone.phone_id=phone.id
-        ORDER BY client.id DESC`);
+        const result = await req.db.client.findAll({
+            include: [{
+                model: req.db.phone
+            }]
+        });
 
-        res.json(result.recordset);
+        res.status(200).send({ data: result });
     } catch (error) {
         console.error('Get clients  error:', error);
         res.status(500).json({ message: 'Server error' });

@@ -1,9 +1,6 @@
 import { Button, DatePicker, Form, Input, InputNumber, Modal, notification, Select } from "antd";
 import CreateCall from "../functions/createCall";
 
-
-
-
 export default function AddCallModal({ open, close, refresh }) {
 
 

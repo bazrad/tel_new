@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function (sequelize, DataTypes) {
-  return sequelize.define('part', {
+  return sequelize.define('station', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -11,18 +11,30 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING(255),
       allowNull: true
     },
-    division_id: {
+    zone_name: {
+      type: DataTypes.STRING(100),
+      allowNull: true
+    },
+    zone_number: {
+      type: DataTypes.STRING(100),
+      allowNull: true
+    },
+    phone_number: {
+      type: DataTypes.STRING(10),
+      allowNull: true
+    },
+    capacity: {
       type: DataTypes.INTEGER,
       allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'part',
+    tableName: 'station',
     schema: 'bazrad',
     timestamps: false,
     indexes: [
       {
-        name: "PK__part__3213E83FCB4D8D87",
+        name: "PK__station__3213E83FCB4D8D87",
         unique: true,
         fields: [
           { name: "id" },

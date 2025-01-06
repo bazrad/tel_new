@@ -8,7 +8,7 @@ const PaymentForm = () => {
   const onFinish = async (values) => {
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/payments/make-payment`, values);
-      message.success('АмжилттаЙ цэнэглдээ !');
+      message.success('АмжилттаЙ цэнэглэгдлээ !');
       form.resetFields();
     } catch (error) {
       console.log('Payment error:', error);
@@ -29,7 +29,7 @@ const PaymentForm = () => {
           name="phoneNumber"
           rules={[
             { required: true, message: 'Утасны дугаар оруулна уу!' },
-            { pattern: /^\d{8}$/, message: 'Утасны дугаар 8 оронтой тоо байх ёстой!' }
+            { pattern: /^\d{6}$/, message: 'Утасны дугаар 6 оронтой тоо байх ёстой!' }
           ]}
         >
           <Input />

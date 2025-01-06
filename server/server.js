@@ -23,9 +23,11 @@ app.use(injectDB(db));  //sequilize mssql connected db
 // })();
 
 // Routes
-app.use('/api/payments', require('./routes/paymentRoutes'));
+app.use('/api/payment', require('./routes/paymentRoutes'));
 app.use('/api/client', require('./routes/clientRoutes'));
 app.use('/api/call', require('./routes/callRoutes'));
+app.use('/api/station', require('./routes/stationRoutes'));
+app.use('/api/worker', require('./routes/workerRoutes'));
 
 const PORT = process.env.PORT || 5000;
 
@@ -34,18 +36,25 @@ app.listen(PORT, () => {
 });
 db.sequelize.sync()
     .then(async (result) => {
-        console.log('sync hiigdlee...')
+        console.log('SYNC ...')
     })
     .catch((err) => console.log(err))
+
+
+
+db.call.belongsTo(db.phone, { foreignKey: 'number_id_in', as: 'number_in' });
+db.call.belongsTo(db.phone, { foreignKey: 'number_id_out', as: 'number_out' });
+db.client.belongsToMany(db.phone, { through: db.client_phone, foreignKey: 'client_id' });
+db.phone.belongsToMany(db.client, { through: db.client_phone, foreignKey: 'phone_id' });
 // Handle application shutdown
-process.on('SIGINT', async () => {
-    try {
-        const pool = await getConnection();
-        await pool.close();
-        console.log('Database pool closed.');
-        process.exit(0);
-    } catch (err) {
-        console.error('Error closing database pool:', err);
-        process.exit(1);
-    }
-});
+//process.on('SIGINT', async () => {
+//     try {
+//         const pool = await getConnection();
+//         await pool.close();
+//         console.log('Database pool closed.');
+//         process.exit(0);
+//     } catch (err) {
+//         console.error('Error closing database pool:', err);
+//         process.exit(1);
+//     }
+// });

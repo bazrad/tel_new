@@ -23,13 +23,9 @@ const makePayment = async (req, res) => {
 const getPaymentHistory = async (req, res) => {
     let connection;
     try {
-        connection = await connectDB();
-        const result = await connection.request()
-            .query(`
-        SELECT * FROM Payments
-        ORDER BY paymentDate DESC`);
+        const result = await req.db.Payments.findAll();
 
-        res.json(result.recordset);
+        res.json(result);
     } catch (error) {
         console.error('Get payment history error:', error);
         res.status(500).json({ message: 'Server error' });

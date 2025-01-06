@@ -1,14 +1,18 @@
 
 const getCalls = async (req, res) => {
     console.log('create client request:', req.body);
-    let connection;
     try {
         const { name, phone_number } = req.body;
 
+        console.log('getting all calls')
+        const result = await req.db.call.findAll({
+            include: [
+                { model: req.db.phone, as: 'number_in' },
+                { model: req.db.phone, as: 'number_out' }
+            ]
+        });
 
-        const result = await req.db.call.findAll();
-
-        res.json(result.recordset);
+        res.status(200).send({ data: result });
     } catch (error) {
         console.error('create client error:', error);
         res.status(500).json({ message: 'Server error' });
@@ -19,14 +23,19 @@ const createCall = async (req, res) => {
     let connection;
     try {
         const { phone1, phone2, start, end } = req.body;
-        connection = await connectDB();
-        const result = await connection.request()
-            .input('phoneNumber', sql.VarChar(10), phone1)
-            .input('phoneNumber2', sql.VarChar(10), phone2)
-            .input('start', sql.DateTime, start)
-            .input('end', sql.DateTime, end)
-            .query(`exec createCall @phoneNumber,@phoneNumber2,@start,@end`);
-        res.json({ done: true });
+        console.log('create call request:', req.body);
+        const createdPhone1 = await req.db.phone.create({ phone_number: phone1 });
+        const createdPhone2 = await req.db.phone.create({ phone_number: phone2 });
+
+        const createdCall = await req.db.call.create({
+            number_id_in: createdPhone1.id,
+            number_id_out: createdPhone2.id,
+            duration_start: start,
+            duration_end: end,
+            calltype_id: 1
+        });
+
+        res.json({ done: true, data: createdCall });
 
     } catch (error) {
         console.error('Get clients  error:', error);

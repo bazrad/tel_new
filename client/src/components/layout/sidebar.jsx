@@ -58,16 +58,16 @@ const data = {
           url: "station",
         },
         {
+          title: "Ярианы түүх",
+          url: "call",
+        },
+        {
           title: "Цэнэглэлт",
-          url: "/",
+          url: "/payment",
         },
         {
           title: "Цэнэглэлт бүртгэл",
           url: "history",
-        },
-        {
-          title: "Ярианы түүх",
-          url: "call",
         },
         {
           title: "Турших",

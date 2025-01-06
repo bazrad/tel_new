@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function (sequelize, DataTypes) {
-  return sequelize.define('client', {
+  return sequelize.define('worker', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -11,22 +11,27 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING(100),
       allowNull: false
     },
-    client_type_id: {
-      type: DataTypes.INTEGER,
+    phone: {
+      type: DataTypes.STRING(100),
       allowNull: false
     },
-    address: {
-      type: DataTypes.STRING(1000),
+    loginName: {
+      type: DataTypes.STRING(100),
       allowNull: false
     },
+    password: {
+      type: DataTypes.STRING(100),
+      allowNull: false
+    },
+
   }, {
     sequelize,
-    tableName: 'client',
+    tableName: 'worker',
     schema: 'bazrad',
     timestamps: false,
     indexes: [
       {
-        name: "PK__client__3213E83F313B1B9F",
+        name: "PK__call__3213E83F144BA8E9",
         unique: true,
         fields: [
           { name: "id" },

@@ -19,13 +19,15 @@ const Call = () => {
     },
     {
       title: 'Дуудлага хийсэн',
-      dataIndex: 'inPhone',
-      key: 'inPhone',
+      dataIndex: 'number_in',
+      key: 'number_in',
+      render: e => e.phone_number
     },
     {
       title: 'Дуудлага хүлээн авсан',
-      dataIndex: 'outPhone',
-      key: 'outPhone',
+      dataIndex: 'number_out',
+      key: 'number_out',
+      render: e => e.phone_number
     },
     {
       title: 'Хугацаа',
@@ -56,7 +58,7 @@ const Call = () => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/call`);
       console.log(response)
-      setCalls(response.data);
+      setCalls(response.data.data);
     } catch (error) {
       console.error('Error fetching clients:', error);
     } finally {

@@ -12,14 +12,11 @@ const Stations = () => {
     const [editingStation, setEditingStation] = useState(null);
 
     const columns = [
-        { title: 'Нэр', dataIndex: 'name', key: 'name' },
-        { title: 'Утасны дугаар', dataIndex: 'phone_number', key: 'phone_number' },
-        { title: '№', dataIndex: 'station_number', key: 'station_number' },
         { title: 'ID', dataIndex: 'id', key: 'id' },
         { title: 'БҮСИЙН ДУГААР', dataIndex: 'zone_number', key: 'zone_number' },
         { title: 'БҮСИЙН НЭР', dataIndex: 'zone_name', key: 'zone_name' },
-        { title: 'СТАНЦЫН НЭР', dataIndex: 'station_name', key: 'station_name' },
-        { title: 'ДУГААРЛАЛТ', dataIndex: 'labeling', key: 'labeling' },
+        { title: 'СТАНЦЫН НЭР', dataIndex: 'name', key: 'name' },
+        { title: 'ДУГААРЛАЛТ', dataIndex: 'id', key: 'id' },
         { title: 'ТРАНК(ХОЛБОХ ШУГАМУУД)', dataIndex: 'trunk_lines', key: 'trunk_lines' },
         { title: 'БАГТААМЖ', dataIndex: 'capacity', key: 'capacity' },
     ];
@@ -31,9 +28,10 @@ const Stations = () => {
     const fetchStation = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`${import.meta.env.VITE_API_URL}/stations`);
-            setStations(response.data);
-            setFilteredStations(response.data);
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/station`);
+            console.log(response)
+            setStations(response.data.data);
+            setFilteredStations(response.data.data);
         } catch (error) {
             console.error('Error fetching station:', error);
         } finally {
@@ -43,7 +41,7 @@ const Stations = () => {
 
     const handleSearch = (value) => {
         const filteredData = stations.filter((station) =>
-            ['name', 'phone_number', 'id'].some((key) =>
+            ['name', 'zone_name', 'id', 'capacity'].some((key) =>
                 String(station[key]).toLowerCase().includes(value.toLowerCase())
             )
         );
@@ -124,6 +122,13 @@ const Stations = () => {
                     <Form.Item
                         label="БҮСИЙН НЭР"
                         name="zone_name"
+                        rules={[{ required: true, message: 'Бүсийн нэрээ оруулна уу!' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        label="БАГТААМЖ"
+                        name="capacity"
                         rules={[{ required: true, message: 'Бүсийн нэрээ оруулна уу!' }]}
                     >
                         <Input />

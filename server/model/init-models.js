@@ -10,7 +10,7 @@ var _deviceprefix = require("./deviceprefix");
 var _devicetype = require("./devicetype");
 var _division = require("./division");
 var _nrptest = require("./nrptest");
-var _part = require("./part");
+var _station = require("./station");
 var _phone = require("./phone");
 var _prefix = require("./prefix");
 var _tarif = require("./tarif");
@@ -28,7 +28,7 @@ function initModels(sequelize) {
   var devicetype = _devicetype(sequelize, DataTypes);
   var division = _division(sequelize, DataTypes);
   var nrptest = _nrptest(sequelize, DataTypes);
-  var part = _part(sequelize, DataTypes);
+  var station = _station(sequelize, DataTypes);
   var phone = _phone(sequelize, DataTypes);
   var prefix = _prefix(sequelize, DataTypes);
   var tarif = _tarif(sequelize, DataTypes);
@@ -47,7 +47,7 @@ function initModels(sequelize) {
     devicetype,
     division,
     nrptest,
-    part,
+    station,
     phone,
     prefix,
     tarif,
