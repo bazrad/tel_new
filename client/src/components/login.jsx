@@ -76,7 +76,7 @@ function LoginForm() {
                                 width: "100%",
                                 height: "auto",
                                 objectFit: "cover",
-                                maxHeight: "400px",
+                                maxHeight: "400px", // Limit the height to prevent overflow
                                 borderRadius: "8px", // Optional for rounded corners
                             }}
                         />
@@ -115,8 +115,8 @@ function LoginForm() {
                             CoSS бүртгэлээр нэвтрэх
                         </Button>
                     </div>
-
-                    {/* Image Column */}
+                </Col>
+                <Col>
                     <div
                         style={{
                             marginTop: "20px",

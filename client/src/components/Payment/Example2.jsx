@@ -80,7 +80,7 @@ const Example2 = () => {
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" block className="bg-green-400">
+          <Button type="primary" htmlType="submit" block>
             Илгээх
           </Button>
         </Form.Item>

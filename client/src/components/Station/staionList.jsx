@@ -11,6 +11,17 @@ const Stations = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editingStation, setEditingStation] = useState(null);
 
+    const [tableParams, setTableParams] = useState({
+        pagination: {
+            current: 1,
+            pageSize: 10,
+            pageSizeOptions: ['10', '20', '30', '50'],
+            showSizeChanger: true, // Хуудас хэмжээ сонгох боломжийг харуулах
+        },
+    });
+
+
+
     const columns = [
         { title: 'ID', dataIndex: 'id', key: 'id' },
         { title: 'БҮСИЙН ДУГААР', dataIndex: 'zone_number', key: 'zone_number' },
@@ -66,6 +77,11 @@ const Stations = () => {
         }
     };
 
+    const handleTableChange = (pagination) => {
+        setTableParams({
+            pagination,
+        });
+    };
 
     return (
         <Card title="Станцын мэдээлэл">
@@ -144,8 +160,18 @@ const Stations = () => {
             <Table
                 columns={columns}
                 dataSource={filteredStations}
+                pagination={{
+                    ...tableParams.pagination,
+                    showSizeChanger: true,
+                    pageSizeOptions: ['10', '20', '30', '50'],
+                    showQuickJumper: false,
+                    locale: {
+                        items_per_page: 'хуудас',
+                    },
+                }}
                 loading={loading}
                 rowKey="id"
+                onChange={handleTableChange}
             />
         </Card>
     );
