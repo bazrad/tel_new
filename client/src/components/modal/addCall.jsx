@@ -1,4 +1,4 @@
-import { Button, DatePicker, Form, Input, InputNumber, Modal, notification, Select } from "antd";
+import { Button, DatePicker, Form, Input, Modal, notification } from "antd";
 import CreateCall from "../functions/createCall";
 
 export default function AddCallModal({ open, close, refresh }) {
@@ -60,7 +60,7 @@ export default function AddCallModal({ open, close, refresh }) {
                 <DatePicker showTime />
             </Form.Item>
             <Form.Item>
-                <Button type="primary" htmlType="submit" className="bg-green-400">
+                <Button type="primary" htmlType="submit">
                     Бүртгэх
                 </Button>
             </Form.Item>
