@@ -8,7 +8,7 @@ const PaymentForm = () => {
   const onFinish = async (values) => {
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/payment/make-payment`, values);
-      message.success('АмжилттаЙ цэнэглэгдлээ !');
+      message.success('Амжилттай цэнэглэгдлээ !');
       form.resetFields();
     } catch (error) {
       console.log('Payment error:', error);
