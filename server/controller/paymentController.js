@@ -4,7 +4,6 @@ const makePayment = async (req, res) => {
     console.log('Make payment request:', req.body);
 
     let connection; // Өгөгдлийн сангийн холболт (хэрэглэгдээгүй)
-
     try {
         // Хүсэлтийн биенээс phoneNumber болон amount утгыг салгаж авна
         const { phoneNumber, amount } = req.body;
@@ -30,17 +29,14 @@ const makePayment = async (req, res) => {
 // Төлбөрийн түүх авах функц
 const getPaymentHistory = async (req, res) => {
     let connection; // Өгөгдлийн сангийн холболт (хэрэглэгдээгүй)
-
     try {
         // "Payments" хүснэгтээс бүх төлбөрийн мэдээллийг ачаалж авна
         const result = await req.db.Payments.findAll();
-
         // Ачаалсан өгөгдлийг хэрэглэгчид илгээнэ
         res.json(result);
     } catch (error) {
         // Алдаа гарвал алдааны мэдээллийг консолд хэвлэнэ
         console.error('Get payment history error:', error);
-
         // Хэрэглэгчид серверийн алдааны хариу буцаана
         res.status(500).json({ message: 'Server error' });
     }

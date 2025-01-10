@@ -28,6 +28,7 @@ app.use('/api/client', require('./routes/clientRoutes'));
 app.use('/api/call', require('./routes/callRoutes'));
 app.use('/api/station', require('./routes/stationRoutes'));
 app.use('/api/worker', require('./routes/workerRoutes'));
+app.use('/api/nrp', require('./routes/nrpRoutes'));
 
 const PORT = process.env.PORT || 5000;
 
