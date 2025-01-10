@@ -40,12 +40,11 @@ db.sequelize.sync()
     })
     .catch((err) => console.log(err))
 
-
-
 db.call.belongsTo(db.phone, { foreignKey: 'number_id_in', as: 'number_in' });
 db.call.belongsTo(db.phone, { foreignKey: 'number_id_out', as: 'number_out' });
 db.client.belongsToMany(db.phone, { through: db.client_phone, foreignKey: 'client_id' });
 db.phone.belongsToMany(db.client, { through: db.client_phone, foreignKey: 'phone_id' });
+
 // Handle application shutdown
 //process.on('SIGINT', async () => {
 //     try {
