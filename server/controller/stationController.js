@@ -11,7 +11,7 @@ const getStations = async (req, res) => {
         res.status(200).send({ data: result });
     } catch (error) {
         // Алдаа гарвал алдааны мэдээллийг консолд хэвлэнэ
-        console.error('create client error:', error);
+        console.error('Error getting stations:', error);
 
         // Хэрэглэгчид серверийн алдааны хариу илгээнэ
         res.status(500).json({ message: 'Server error' });
@@ -28,15 +28,60 @@ const createStation = async (req, res) => {
         res.json({ done: true, data: createdStation });
     } catch (error) {
         // Алдаа гарвал алдааны мэдээллийг консолд хэвлэнэ
-        console.error('Get clients  error:', error);
+        console.error('Error creating station:', error);
 
         // Хэрэглэгчид серверийн алдааны хариу илгээнэ
         res.status(500).json({ message: 'Server error' });
     }
 };
 
+// Станц засварлах функц
+const updateStation = async (req, res) => {
+    console.log('Update station request:', req.body);
+    try {
+        const { id } = req.params; // Станцын ID-г хүсэлтийн параметрээс авна
+
+        const [updatedRows, updatedStation] = await req.db.station.update(req.body, {
+            where: { id },
+            returning: true,
+        });
+
+        if (updatedRows > 0) {
+            res.json({ done: true, data: updatedStation[0] }); // Шинэчлэгдсэн өгөгдлийг илгээнэ
+        } else {
+            res.status(404).json({ message: 'Station not found' }); // Станц олдоогүй тохиолдолд
+        }
+    } catch (error) {
+        console.error('Error updating station:', error); // Алдааны мэдээллийг консолд хэвлэнэ
+        res.status(500).json({ message: 'Server error' }); // Серверийн алдааны хариу илгээнэ
+    }
+};
+
+
+
+// Станц устгах функц
+const deleteStation = async (req, res) => {
+    console.log('Delete station request:', req.params.id);
+    try {
+        const { id } = req.params; // Станцын ID-г хүсэлтийн параметрээс авна
+
+        const deleted = await req.db.station.destroy({ where: { id } }); // Станцыг устгах үйлдэл
+
+        if (deleted) {
+            res.json({ done: true, message: 'Station deleted successfully' }); // Амжилттай устгасан хариу
+        } else {
+            res.status(404).json({ message: 'Station not found' }); // Станц олдоогүй хариу
+        }
+    } catch (error) {
+        console.error('Error deleting station:', error); // Алдааны мэдээллийг консолд хэвлэнэ
+        res.status(500).json({ message: 'Server error' }); // Серверийн алдааны хариу илгээнэ
+    }
+};
+
 // Эдгээр функцуудыг модулиас экспортлох
 module.exports = {
     getStations,    // Бүх станцуудыг авах функц
-    createStation   // Шинэ станц үүсгэх функц
+    createStation,  // Шинэ станц үүсгэх функц
+    updateStation,  // Станц засварлах функц
+    deleteStation   // Станц устгах функц
 };

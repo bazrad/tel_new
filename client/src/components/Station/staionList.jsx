@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Card, Modal, Button, Form, Input, message, Popconfirm } from 'antd';
+import { EditOutlined, DeleteOutlined, QuestionCircleOutlined } from '@ant-design/icons'; // Icons импортлох
 import axios from 'axios';
 
 const { Search } = Input;
@@ -9,17 +10,32 @@ const Stations = () => {
     const [filteredStations, setFilteredStations] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [editingStation, setEditingStation] = useState(null);
+    const [editingStation, setEditingStation] = useState(false);
 
     const [tableParams, setTableParams] = useState({
         pagination: {
             current: 1,
             pageSize: 10,
             pageSizeOptions: ['10', '20', '30', '50'],
-            showSizeChanger: true, // Хуудас хэмжээ сонгох боломжийг харуулах
+            showSizeChanger: true,
         },
     });
 
+    const handleEdit = (record) => {
+        setEditingStation(record);
+        setIsModalVisible(true);
+    };
+
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`${import.meta.env.VITE_API_URL}/station/${id}`);
+            message.success('Амжилттай устгагдлаа!');
+            fetchStations();
+        } catch (error) {
+            console.error('Error deleting station:', error);
+            message.error('Алдаа гарлаа! Дахин оролдоно уу.');
+        }
+    };
 
 
     const columns = [
@@ -27,24 +43,53 @@ const Stations = () => {
         { title: 'БҮСИЙН ДУГААР', dataIndex: 'zone_number', key: 'zone_number' },
         { title: 'БҮСИЙН НЭР', dataIndex: 'zone_name', key: 'zone_name' },
         { title: 'СТАНЦЫН НЭР', dataIndex: 'name', key: 'name' },
-        { title: 'ДУГААРЛАЛТ', dataIndex: 'id', key: 'id' },
         { title: 'ТРАНК(ХОЛБОХ ШУГАМУУД)', dataIndex: 'trunk_lines', key: 'trunk_lines' },
         { title: 'БАГТААМЖ', dataIndex: 'capacity', key: 'capacity' },
+        {
+            title: 'Үйлдэл',
+            key: 'action',
+            render: (_, record) => (
+                <span>
+                    {/* Засах дүрс */}
+                    <Button
+                        type="link"
+                        icon={<EditOutlined />}
+                        onClick={() => handleEdit(record)}
+                    />
+                    {/* Устгах дүрс */}
+                    <Popconfirm
+                        title="Та энэ мөрийг устгахдаа итгэлтэй байна уу?"
+                        icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+                        onConfirm={() => handleDelete(record.id)}
+                        onCancel={() => message.info('Устгах үйлдлийг цуцаллаа.')}
+                        okText="Тийм"
+                        cancelText="Үгүй"
+                    >
+                        <Button
+                            type="link"
+                            danger
+                            icon={<DeleteOutlined />}
+                        />
+                    </Popconfirm>
+                </span>
+            ),
+        },
     ];
 
+
+
     useEffect(() => {
-        fetchStation();
+        fetchStations();
     }, []);
 
-    const fetchStation = async () => {
+    const fetchStations = async () => {
         setLoading(true);
         try {
             const response = await axios.get(`${import.meta.env.VITE_API_URL}/station`);
-            console.log(response)
             setStations(response.data.data);
             setFilteredStations(response.data.data);
         } catch (error) {
-            console.error('Error fetching station:', error);
+            console.error('Error fetching stations:', error);
         } finally {
             setLoading(false);
         }
@@ -53,7 +98,7 @@ const Stations = () => {
     const handleSearch = (value) => {
         const filteredData = stations.filter((station) =>
             ['name', 'zone_name', 'id', 'capacity'].some((key) =>
-                String(station[key]).toLowerCase().includes(value.toLowerCase())
+                String(station[key] || '').toLowerCase().includes(value.toLowerCase())
             )
         );
         setFilteredStations(filteredData);
@@ -70,7 +115,7 @@ const Stations = () => {
             }
             setIsModalVisible(false);
             setEditingStation(null);
-            fetchStation();
+            fetchStations();
         } catch (error) {
             console.error('Error adding station:', error);
             message.error('Алдаа гарлаа! Дахин оролдоно уу.');
@@ -84,14 +129,14 @@ const Stations = () => {
     };
 
     return (
-        <Card title="Станцын мэдээлэл">
-            <div className='flex justify-between '>
+        <Card title="Станцын мэдээлэл" className="p-0">
+            <div className='flex justify-between'>
                 <Search
                     placeholder="Хайх текстээ оруулна уу"
                     className='mb-2 w-[25%]'
                     allowClear
                     enterButton="Хайх"
-                    size="50px"
+                    size="middle"
                     onSearch={handleSearch}
                 />
                 <Button
@@ -105,14 +150,20 @@ const Stations = () => {
 
             <Modal
                 title={editingStation ? "Станц засах" : "Станц нэмэх"}
-                visible={isModalVisible}
+                open={isModalVisible}
                 onCancel={() => { setIsModalVisible(false); setEditingStation(null); }}
                 footer={null}
             >
                 <Form
                     layout="vertical"
                     onFinish={handleAddStation}
-                    initialValues={editingStation || {}}
+                    initialValues={editingStation ? {
+                        name: editingStation.name,
+                        phone_number: editingStation.phone_number,
+                        zone_number: editingStation.zone_number,
+                        zone_name: editingStation.zone_name,
+                        capacity: editingStation.capacity
+                    } : {}}
                 >
                     <Form.Item
                         label="Нэр"
@@ -145,7 +196,7 @@ const Stations = () => {
                     <Form.Item
                         label="БАГТААМЖ"
                         name="capacity"
-                        rules={[{ required: true, message: 'Бүсийн нэрээ оруулна уу!' }]}
+                        rules={[{ required: true, message: 'Багтаамжаа оруулна уу!' }]}
                     >
                         <Input />
                     </Form.Item>
@@ -156,6 +207,7 @@ const Stations = () => {
                     </Form.Item>
                 </Form>
             </Modal>
+
 
             <Table
                 columns={columns}
@@ -169,6 +221,7 @@ const Stations = () => {
                         items_per_page: 'хуудас',
                     },
                 }}
+                size="small" // Мөр хоорондын зай багасгах
                 loading={loading}
                 rowKey="id"
                 onChange={handleTableChange}
@@ -178,3 +231,4 @@ const Stations = () => {
 };
 
 export default Stations;
+

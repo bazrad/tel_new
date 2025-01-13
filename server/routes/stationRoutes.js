@@ -1,7 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const { getStations, createStation } = require('../controller/stationController');
+const { getStations, createStation, updateStation, deleteStation } = require('../controller/stationController');
 
-router.get('/', getStations).post('/', createStation);
+// Клиент засварлах
+router.put('/:id', updateStation);
 
-module.exports = router; 
+// Клиент устгах
+router.delete('/:id', deleteStation);
+
+// Клиент үүсгэх
+router.post('/', createStation);
+
+// Бүх клиентүүдийг авах
+router.get('/', getStations);
+
+
+module.exports = router;

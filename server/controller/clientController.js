@@ -1,37 +1,77 @@
-// Шинэ клиент үүсгэх функц
+// Клиент үүсгэх функц
 const createClient = async (req, res) => {
-    // Клиентээс ирсэн хүсэлтийн өгөгдлийг консолд хэвлэнэ
-    console.log('create client request:', req.body);
-
+    console.log('Create client request:', req.body);
     try {
-        // Хүсэлтийн биенээс name, phone_number, address өгөгдлийг авна
         const { name, phone_number, address } = req.body;
 
-        // "client" хүснэгтэд шинэ клиент үүсгэнэ
         const client = await req.db.client.create({
-            name,              // Клиентын нэр
-            address,           // Клиентын хаяг
-            client_type_id: 1  // Клиентын төрөл (default утга: 1)
+            name,
+            address,
+            client_type_id: 1, // Default client type
         });
 
-        // "phone" хүснэгтэд шинэ утасны дугаар үүсгэнэ
         const phone = await req.db.phone.create({
-            phone_number       // Утасны дугаар
+            phone_number,
         });
 
-        // "client_phone" хүснэгтэд клиент болон утасны дугаарыг холбосон бичлэг үүсгэнэ
-        const client_phone = await req.db.client_phone.create({
-            client_id: client.id, // Үүсгэсэн клиентын ID
-            phone_id: phone.id    // Үүсгэсэн утасны ID
+        await req.db.client_phone.create({
+            client_id: client.id,
+            phone_id: phone.id,
         });
 
-        // Амжилттай хариу буцаана
-        res.json({ message: 'client successfully created' });
+        res.json({ message: 'Client successfully created' });
     } catch (error) {
-        // Алдаа гарвал консолд хэвлэнэ
-        console.error('create client error:', error);
+        console.error('Create client error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
 
-        // Хэрэглэгчид серверийн алдааны хариу илгээнэ
+// Клиент шинэчлэх функц
+const updateClient = async (req, res) => {
+    console.log('Update client request:', req.body);
+    try {
+        const { name, phone_number, address } = req.body;
+
+        const client = await req.db.client.findByPk(req.params.id);
+        if (!client) {
+            return res.status(404).json({ message: 'Client not found' }); o
+        }
+
+        await client.update({ name, address });
+
+        const phone = await req.db.phone.create({
+            phone_number,
+        });
+
+        await req.db.client_phone.destroy({
+            where: { client_id: client.id },
+        });
+
+        await req.db.client_phone.create({
+            client_id: client.id,
+            phone_id: phone.id,
+        });
+
+        res.json({ message: 'Client successfully updated' });
+    } catch (error) {
+        console.error('Update client error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// Клиент устгах функц
+const deleteClient = async (req, res) => {
+    console.log('Delete client request:', req.params.id);
+    try {
+        const client = await req.db.client.findByPk(req.params.id);
+        if (!client) {
+            return res.status(404).json({ message: 'Client not found' });
+        }
+
+        await client.destroy();
+        res.json({ message: 'Client successfully deleted' });
+    } catch (error) {
+        console.error('Delete client error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };
@@ -39,26 +79,25 @@ const createClient = async (req, res) => {
 // Бүх клиентүүдийг авах функц
 const getAllClients = async (req, res) => {
     try {
-        // "client" хүснэгтээс бүх клиентүүдийг ачаалж, холбоотой "phone" өгөгдлийг хамтад нь авна
-        const result = await req.db.client.findAll({
-            include: [{
-                model: req.db.phone // Клиенттой холбоотой утасны дугаарыг ачаална
-            }]
+        const clients = await req.db.client.findAll({
+            include: [
+                {
+                    model: req.db.phone, // Холбоотой утасны дугааруудыг авна
+                },
+            ],
         });
 
-        // Амжилттай бол ачаалсан өгөгдлийг хэрэглэгчид илгээнэ
-        res.status(200).send({ data: result });
+        res.status(200).json({ data: clients });
     } catch (error) {
-        // Алдаа гарвал консолд хэвлэнэ
-        console.error('Get clients  error:', error);
-
-        // Хэрэглэгчид серверийн алдааны хариу илгээнэ
+        console.error('Get all clients error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 };
 
-// Эдгээр функцуудыг модулиас экспортлох
+// Модулиас функцуудыг экспортлох
 module.exports = {
-    createClient,   // Шинэ клиент үүсгэх функц
-    getAllClients   // Бүх клиентүүдийг авах функц
+    createClient,
+    updateClient,
+    deleteClient,
+    getAllClients,
 };
