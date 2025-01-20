@@ -38,6 +38,8 @@ export function NavUser({
   const navigate = useNavigate()
   const logoutfunc = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
+
     navigate("/login");
   }
   return (

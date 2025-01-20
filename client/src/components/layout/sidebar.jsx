@@ -55,10 +55,10 @@ const data = {
       items: [
         { title: "Станцын мэдээлэл", url: "station" },
         { title: "Ярианы түүх", url: "call" },
+        { title: "Ярианы дүн", url: "tariff" },
         { title: "Цэнэглэлт", url: "/payment" },
         { title: "Цэнэглэлт бүртгэл", url: "history" },
         { title: "Турших", url: "example" },
-        { title: "Суурь мэдээлэл", url: "example2" },
       ],
     },
     {

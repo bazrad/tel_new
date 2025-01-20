@@ -11,9 +11,11 @@ const login = async (req, res) => {
                 password: req.body.password  // Клиентээс ирсэн нууц үг
             }
         });
-
+        if (!result) throw new Error('login name or pass wrong')
+        const token = result.createToken(result.id, result.name);
+        console.log(token)
         // Хайлт амжилттай бол ажилтны мэдээллийг хариу болгон илгээнэ
-        res.status(200).send({ data: result });
+        res.status(200).send({ data: result, token });
     } catch (error) {
         // Алдаа гарвал алдааны мэдээллийг консолд хэвлэнэ
         console.error('create client error:', error);

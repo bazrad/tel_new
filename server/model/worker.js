@@ -1,6 +1,8 @@
 const Sequelize = require('sequelize');
+const jwt = require('jsonwebtoken')
+
 module.exports = function (sequelize, DataTypes) {
-  return sequelize.define('worker', {
+  const worker = sequelize.define('worker', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -39,4 +41,15 @@ module.exports = function (sequelize, DataTypes) {
       },
     ]
   });
+  worker.prototype.createToken = function (id, name) {
+    const token = jwt.sign(
+      { id: worker.id, name: name },
+      'BAZRAD_TOKEN_SECRET',
+      {
+        expiresIn: '1 day',
+      }
+    )
+    return token
+  }
+  return worker;
 };

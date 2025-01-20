@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Button,
     Typography,
@@ -19,7 +19,11 @@ function LoginForm() {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-
+    useEffect(() => {
+        localStorage.clear("token")
+        localStorage.clear("user")
+        // login duudsanl bol logout gj uzne
+    }, [])
     const handleLogin = async () => {
         console.log("Username:", username);
         console.log("Password:", password);
@@ -29,9 +33,10 @@ function LoginForm() {
                 password: password
             });
             console.log(response);
-            if (response.data.data) {
+            if (response.data.data && response.data.token) {
+                localStorage.setItem('token', response.data.tokens)
                 localStorage.setItem("user", JSON.stringify(response.data.data));
-                navigate("/station");
+                navigate("/");
             } else {
                 notification.error({ message: "Нэвтрэх нэр эсвэл нууц үг буруу байна!" });
             }

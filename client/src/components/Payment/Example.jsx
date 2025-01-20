@@ -9,7 +9,7 @@ const Example = () => {
   return (
     <Card title="Карт оруул">
       <Descriptions >
-        <span>Testlel</span>
+        <span>Test хийх</span>
       </Descriptions>
     </Card>
   );
