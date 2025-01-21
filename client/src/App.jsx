@@ -17,10 +17,10 @@ const { Content } = Layout;
 
 const App = () => {
   return <Router>
-    <Content style={{ padding: '24px' }}>
+    <Content style={{ paddingTop: '5px', paddingRight: '24px', paddingBottom: '24px', paddingLeft: '24px' }}>
       <Routes>
-        <Route path="/" element={<TelLayout><HomePage /></TelLayout>} />
         <Route path="/login" element={<LoginForm />} />
+        <Route path="/" element={<TelLayout><HomePage /></TelLayout>} />
         <Route path="/payment" element={<TelLayout><PaymentForm /></TelLayout>} />
         <Route path="/history" element={<TelLayout><PaymentHistory /></TelLayout>} />
         <Route path="/example" element={<TelLayout><Example /></TelLayout>} />
@@ -29,7 +29,6 @@ const App = () => {
         <Route path="/call" element={<TelLayout><Call /></TelLayout>} />
         <Route path="/station" element={<TelLayout><Stations /></TelLayout>} />
         <Route path="*" element={<NotFoundPage />} />
-
       </Routes>
     </Content>
   </Router>

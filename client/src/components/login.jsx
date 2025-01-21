@@ -23,6 +23,7 @@ function LoginForm() {
         localStorage.clear("token")
         localStorage.clear("user")
         // login duudsanl bol logout gj uzne
+        // logout hiih uyd token ustgana    
     }, [])
     const handleLogin = async () => {
         console.log("Username:", username);

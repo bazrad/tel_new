@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 
 const { Content } = Layout;
 
-
 export default function TelLayout({ children }) {
   useEffect(() => {
     checkToken()

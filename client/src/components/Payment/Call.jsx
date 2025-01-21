@@ -110,10 +110,8 @@ const Call = () => {
     reader.onerror = () => {
       message.error("Error reading the file");
     };
-
     // Read the file as text
     reader.readAsText(file);
-
     // Return false to prevent the default behavior of the Upload component (uploading the file itself)
     return false;
   };
