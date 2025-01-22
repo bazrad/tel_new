@@ -4,6 +4,12 @@ const cors = require('cors'); // CORS (Cross-Origin Resource Sharing)-ийг з�
 const dotenv = require('dotenv'); // Орчны хувьсагчдыг тохируулах
 const injectDB = require('./middleware/injectDB'); // Өгөгдлийн сангийн холболтыг middleware-д оруулах
 const db = require('./seq_db'); // Sequelize-ийн өгөгдлийн сангийн тохиргоо
+const colors = require('colors'); // Терминалд өнгө өгөх
+
+
+console.log("Hello".green); // Терминалд өнгө өгөх
+
+
 
 dotenv.config(); // Орчны хувьсагчдыг `.env` файлд тохируулах
 
