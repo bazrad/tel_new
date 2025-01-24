@@ -207,10 +207,17 @@ const Stations = () => {
                     </Form.Item>
                 </Form>
             </Modal>
+
             <Table
                 columns={columns}
                 dataSource={filteredStations}
-                pagination={tableParams.pagination}
+                pagination={{
+                    ...tableParams.pagination,
+                    locale: {
+                        items_per_page: 'хуудас', // Зөвлөгөө: "item_per_page" биш, "items_per_page" ашиглана.
+                    },
+                }}
+                size="small"
                 loading={loading}
                 rowKey="id"
                 onChange={handleTableChange}

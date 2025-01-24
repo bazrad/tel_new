@@ -19,24 +19,24 @@ const Clients = () => {
       showSizeChanger: true,
     },
   });
-  const [isEditMode, setIsEditMode] = useState(false); // Add state to track edit mode
-  const [editingClient, setEditingClient] = useState(null); // To store the client being edited
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editingClient, setEditingClient] = useState(null);
 
   const columns = [
-    { title: '№', dataIndex: 'number', key: 'number', render: (_text, _record, index) => index + 1, },
+    { title: '№', dataIndex: 'number', key: 'number', render: (_text, _record, index) => index + 1 },
     { title: 'Нэр', dataIndex: 'name', key: 'name' },
     {
       title: 'Утасны дугаар',
       dataIndex: 'phones',
       key: 'phones',
-      render: (phones) => phones.map((phone) => phone.phone_number).join(', '),
+      render: (phones) => (phones || []).map((phone) => phone.phone_number).join(', '),
     },
-    { title: 'ХАЯГ', dataIndex: 'address', key: 'address' },
+    { title: 'Хаяг', dataIndex: 'address', key: 'address' },
     { title: 'ID', dataIndex: 'id', key: 'id' },
-    { title: 'ТӨРӨЛ', dataIndex: 'type', key: 'type' },
-    { title: 'САЛБАР НЭГЖ', dataIndex: 'branch', key: 'branch' },
-    { title: 'СТАНЦ', dataIndex: 'station', key: 'station' },
-    { title: 'ХӨНГӨЛӨЛТ', dataIndex: 'discount', key: 'discount' },
+    { title: 'Төрөл', dataIndex: 'type', key: 'type' },
+    { title: 'Салбар нэгж', dataIndex: 'branch', key: 'branch' },
+    { title: 'Станц', dataIndex: 'station', key: 'station' },
+    { title: 'Хөнгөлөлт', dataIndex: 'discount', key: 'discount' },
     {
       title: 'Үйлдэл',
       key: 'action',
@@ -51,7 +51,6 @@ const Clients = () => {
             title="Та энэ мөрийг устгахдаа итгэлтэй байна уу?"
             icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
             onConfirm={() => handleDeleteClient(record.id)}
-            onCancel={() => message.info('Устгах үйлдлийг цуцаллаа.')}
             okText="Тийм"
             cancelText="Үгүй"
           >
@@ -63,26 +62,29 @@ const Clients = () => {
   ];
 
   useEffect(() => {
-    fetchClient();
+    fetchClients();
   }, [tableParams.pagination?.current, tableParams.pagination?.pageSize]);
 
-  const fetchClient = async () => {
+  const fetchClients = async () => {
     setLoading(true);
     try {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/client`);
       setClients(response.data.data);
       setFilteredClients(response.data.data);
-      setLoading(false);
     } catch (error) {
       console.error('Error fetching clients:', error);
+    } finally {
       setLoading(false);
     }
   };
 
   const handleSearch = (value) => {
     const filteredData = clients.filter((client) =>
-      ['name', 'address', 'phone_number', 'id'].some((key) =>
-        String(client[key]).toLowerCase().includes(value.toLowerCase())
+      ['name', 'address', 'id'].some((key) =>
+        String(client[key] || '').toLowerCase().includes(value.toLowerCase())
+      ) ||
+      (client.phones || []).some((phone) =>
+        phone.phone_number.toLowerCase().includes(value.toLowerCase())
       )
     );
     setFilteredClients(filteredData);
@@ -94,29 +96,28 @@ const Clients = () => {
       message.success('Амжилттай хэрэглэгч үүслээ!');
       setIsModalVisible(false);
       form.resetFields();
-      fetchClient();
+      fetchClients();
     } catch (error) {
-      console.error('Client error:', error);
+      console.error('Error adding client:', error);
       message.error('Алдаа гарлаа! Дахин оролдоно уу.');
     }
   };
 
   const handleEditClient = (record) => {
-    setIsEditMode(true); // Set to edit mode
-    setEditingClient(record); // Set client to be edited
-    form.setFieldsValue(record); // Populate form fields with the client's data
-    setIsModalVisible(true); // Open the modal
+    setIsEditMode(true);
+    setEditingClient(record);
+    form.setFieldsValue(record);
+    setIsModalVisible(true);
   };
 
   const handleUpdateClient = async (values) => {
     try {
-      console.log('editing')
       await axios.put(`${import.meta.env.VITE_API_URL}/client/${editingClient.id}`, values);
       message.success('Амжилттай засварлалаа!');
       setIsModalVisible(false);
       form.resetFields();
-      setIsEditMode(false); // Reset edit mode
-      fetchClient();
+      setIsEditMode(false);
+      fetchClients();
     } catch (error) {
       console.error('Error updating client:', error);
       message.error('Алдаа гарлаа! Дахин оролдоно уу.');
@@ -127,7 +128,7 @@ const Clients = () => {
     try {
       await axios.delete(`${import.meta.env.VITE_API_URL}/client/${id}`);
       message.success('Амжилттай устгалаа!');
-      fetchClient();
+      fetchClients();
     } catch (error) {
       console.error('Error deleting client:', error);
       message.error('Алдаа гарлаа! Дахин оролдоно уу.');
@@ -148,17 +149,15 @@ const Clients = () => {
           className="w-[25%]"
           allowClear
           enterButton="Хайх"
-          size="middle"
           onSearch={handleSearch}
         />
         <Button
           type="primary"
           onClick={() => {
-            setIsEditMode(false); // Switch to add mode
+            setIsEditMode(false);
             setIsModalVisible(true);
             form.resetFields();
           }}
-          className="bg-green-400"
         >
           Хэрэглэгч нэмэх
         </Button>
@@ -169,38 +168,71 @@ const Clients = () => {
         visible={isModalVisible}
         onCancel={() => {
           setIsModalVisible(false);
-          form.resetFields(); // Clear form when closing modal
+          form.resetFields();
         }}
         footer={null}
       >
-        <Form form={form} layout="vertical" onFinish={isEditMode ? handleUpdateClient : handleAddClient}>
-          <Form.Item label="НЭР" name="name" rules={[{ required: true, message: 'Нэрээ оруулна уу!' }]}>
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={isEditMode ? handleUpdateClient : handleAddClient}
+        >
+          <Form.Item
+            label="Нэр"
+            name="name"
+            rules={[{ required: true, message: 'Нэрээ оруулна уу!' }]}
+          >
             <Input />
           </Form.Item>
           <Form.Item
-            label="УТАСНЫ ДУГААР"
+            label="Утасны дугаар"
             name="phone_number"
             rules={[{ required: true, message: 'Дугаараа оруулна уу!' }]}
           >
-            <Select placeholder="Утасны дугаар сонгоно уу">
-              <Select.Option value="880011">880011</Select.Option>
-              <Select.Option value="990022">990022</Select.Option>
-              <Select.Option value="990044">990044</Select.Option>
-            </Select>
+            <Select
+              showSearch
+              placeholder="Утасны дугаар сонгоно уу"
+              filterOption={(input, option) =>
+                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+              }
+              options={[
+                {
+                  label: <span>manager</span>,
+                  title: 'manager',
+                  options: [
+                    { value: "880011", label: "880011", },
+                    { value: "990022", label: "990022" },
+                  ],
+                },
+                { value: "990022", label: "990022" },
+                { value: "990044", label: "990044" },
+              ]}
+            />
           </Form.Item>
           <Form.Item
-            label="ХАЯГ"
+            label="Хаяг"
             name="address"
-            rules={[{ required: true, message: 'ХАЯГ оруулна уу!' }]}
+            rules={[{ required: true, message: 'Хаяг оруулна уу!' }]}
           >
-            <Select placeholder="Хаяг сонгоно уу">
-              <Select.Option value="Улаанбаатар">Улаанбаатар</Select.Option>
-              <Select.Option value="Дархан">Дархан</Select.Option>
-              <Select.Option value="Эрдэнэт">Эрдэнэт</Select.Option>
-            </Select>
+            <Select
+              showSearch
+              placeholder="Хаяг сонгоно уу"
+              // optionFilterProp="label"
+              // filterSort={(optionA, optionB) =>
+              //   (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+              // }
+              filterOption={(input, option) =>
+                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+              }
+              options={[
+                { value: "Улаанбаатар", label: "Улаанбаатар" },
+                { value: "Дархан", label: "Дархан" },
+                { value: "Эрдэнэт", label: "Эрдэнэт" },
+              ]}
+            />
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit" className="bg-green-400">
+            <Button type="primary" htmlType="submit">
               {isEditMode ? "Засах" : "Нэмэх"}
             </Button>
           </Form.Item>
@@ -212,18 +244,16 @@ const Clients = () => {
         dataSource={filteredClients}
         pagination={{
           ...tableParams.pagination,
-          showSizeChanger: true,
-          pageSizeOptions: ['10', '20', '30', '50'],
-          showQuickJumper: false,
           locale: {
-            items_per_page: 'хуудас',
+            items_per_page: 'хуудас', // Зөвлөгөө: "item_per_page" биш, "items_per_page" ашиглана.
           },
         }}
-        size='small'
+        size="small"
         loading={loading}
         rowKey="id"
         onChange={handleTableChange}
       />
+
     </Card>
   );
 };

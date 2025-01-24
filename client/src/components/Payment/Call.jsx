@@ -4,6 +4,7 @@ import axios from 'axios';
 import { FileTextOutlined, PhoneOutlined } from '@ant-design/icons';
 import AddCallModal from '../modal/addCall';
 import dayjs from 'dayjs';
+import currencyFormat from '@/helpers/currencyFormat';
 
 const Call = () => {
   const [calls, setCalls] = useState([]);
@@ -47,12 +48,29 @@ const Call = () => {
       dataIndex: 'in_trunk',
       key: 'in_trunk',
     },
-    // {
-    //   title: 'Дүн',
-    //   dataIndex: 'amount',
-    //   key: 'amount',
-    // },
+    {
+      title: 'Тариф',
+      dataIndex: 'tariffName',
+      key: 'tariffName',
+    },
+    {
+      title: 'Дүн',
+      dataIndex: 'amount',
+      key: 'amount',
+    },
+
   ];
+  1
+
+
+  const tariff = [
+    { id: 1, name: 'УБТЗ төлбөргүй', tarif_type_id: 1, root: 0, l1: 0, secondTime: 60, l2: 0, l3: 0, llast: 0, calltype_id: 1, },
+    { id: 2, name: 'УБТЗ хот дотор', tarif_type_id: 2, root: 10, l1: 10, secondTime: 60, l2: 0, l3: 0, llast: 0, calltype_id: 2 },
+    { id: 3, name: 'УБТЗ хот хооронд', tarif_type_id: 3, root: 20, l1: 20, secondTime: 6, l2: 0, l3: 0, llast: 0, calltype_id: 3 },
+    { id: 4, name: 'УБТЗ гадаад', tarif_type_id: 4, root: 30, l1: 3, secondTime: 6, l2: 0, l3: 0, llast: 0, calltype_id: 4 },
+    { id: 5, name: 'УБТЗ -р дамжин МЦХ ХК руу', tarif_type_id: 5, root: 60, l1: 6, secondTime: 60, l2: 0, l3: 0, llast: 0, calltype_id: 5 },
+  ];
+
 
   useEffect(() => {
     getCalls();
@@ -61,13 +79,20 @@ const Call = () => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/call`);
       console.log(response)
-      setCalls(response.data.data);
+      //Math.floor(Math.random() * 4);
+
+      setCalls(response.data.data.map(call => {
+        const tariffNum = Math.floor(Math.random() * 5);
+        // console.log(tariffNum);
+        return { ...call, tariff: tariff[tariffNum], tariffName: tariff[tariffNum].name }
+      }));
     } catch (error) {
       console.error('Error fetching clients:', error);
     } finally {
       setLoading(false);
     }
   };
+  console.log(calls);
   const closeAddCall = () => { setAddCall(false) }
   const showAddCall = () => { setAddCall(true) }
   const handleFileUpload = (file) => {
@@ -101,12 +126,14 @@ const Call = () => {
       }
 
       if (succ === data.length) {
-        notification.success({ message: "Амжилттай бүртгэгдлээ" })
+        notification.success({ message: "Амжилттай бүртгэгдлээ" });
+        console.log(`calls`, calls);
         getCalls();
+
       }
       message.success(`${file.name} амжилттай татлаа!`);
     };
-
+    console.log(`calls`, calls);
     reader.onerror = () => {
       message.error("Error reading the file");
     };
@@ -115,6 +142,28 @@ const Call = () => {
     // Return false to prevent the default behavior of the Upload component (uploading the file itself)
     return false;
   };
+
+  const calculateTariff = () => {
+    const ika = calls.map(call => {
+      var diff = Math.abs(dayjs(call.duration_end).diff(dayjs(call.duration_start), 'second'));
+      var cost = 0;
+      if (diff > 5 && diff < 60) {
+        cost = call.tariff.root;
+      } else if (diff > 60) {
+        if (call.secondTime === 60) {
+          diff -= 60;
+          cost = call.tariff.root + (diff / 60) * call.tariff.l1;
+        }
+        else {
+          diff -= 60;
+          cost = call.tariff.root + (diff / 6) * call.tariff.l1;
+        }
+      }
+      return { ...call, amount: currencyFormat(cost) }
+    })
+    setCalls(ika);
+  }
+
   return (
     <Card title="Дуудлагын мэдээллүүд">
       <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-start', flexDirection: 'row' }}>
@@ -141,6 +190,18 @@ const Call = () => {
             Файл-с бүртгэх
           </Button>
         </Upload>
+
+
+
+        <Button
+          className="bg-green-400"
+          type="primary"
+          onClick={() => calculateTariff()}
+          icon={<FileTextOutlined />}
+        >
+          Бодолт хийх
+        </Button>
+
 
       </div>
       <Table

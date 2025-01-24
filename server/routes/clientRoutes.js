@@ -4,7 +4,8 @@ const { createClient, getAllClients, updateClient, deleteClient } = require('../
 
 router.put('/:id', updateClient);
 router.delete('/:id', deleteClient);
-router.get('/', getAllClients).post('/', createClient);
+router.get('/', getAllClients)
+router.post('/', createClient)
 
 //router.post('/:id/phone', addPhoneToClient);
 

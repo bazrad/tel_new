@@ -21,6 +21,7 @@ const calculateTariff = async (req, res) => {
                     switch (expression) {
                         case 'UBTZinCity':
                             cost = 10;
+
                             break;
                         case 'UBTZoutCity':
                             cost = 30;
@@ -29,7 +30,11 @@ const calculateTariff = async (req, res) => {
                             cost = 25;
                             break;
                         case 'otherOutCity':
+                            cost = 60;
+                            break;
                         case 'mobileInCity':
+                            cost = 60;
+                            break;
                         case 'mobileOutCity':
                             cost = 60;
                             break;
@@ -71,4 +76,32 @@ const calculateTariff = async (req, res) => {
     }
 };
 
+// Бүх тарифуудыг авах функц
+const getAllTariffs = async (req, res) => {
+    try {
+        // `req.db.tariff` байгаа эсэхийг шалгана
+        if (!req.db || !req.db.tarif) {
+            return res.status(500).json({ message: 'Database model not found: tarif' });
+        }
 
+        // Тарифуудыг өгөгдлийн сангаас авах
+        const tariffs = await req.db.tarif.findAll({
+            include: [
+                {
+                    model: req.db.name, // Холбоотой нэрүүдийг авна
+                    required: false, // Холбогдоогүй бичлэгүүдийг ч авна
+                },
+            ],
+        });
+
+        res.status(200).json({ data: tarif });
+    } catch (error) {
+        console.error('Get all tariffs error:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+// Модулиас функцуудыг экспортлох
+module.exports = {
+    getAllTariffs,
+};

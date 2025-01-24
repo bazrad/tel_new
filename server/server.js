@@ -7,7 +7,7 @@ const db = require('./seq_db'); // Sequelize-ийн өгөгдлийн санг�
 const colors = require('colors'); // Терминалд өнгө өгөх
 
 
-console.log("Hello".green); // Терминалд өнгө өгөх
+console.log("Сервер аслаа !!! ".green); // Терминалд өнгө өгөх
 
 
 
@@ -37,13 +37,15 @@ app.use('/api/client', require('./routes/clientRoutes')); // Харилцагч�
 app.use('/api/call', require('./routes/callRoutes')); // Дуудлагатай холбоотой маршрут
 app.use('/api/station', require('./routes/stationRoutes')); // Станцтай холбоотой маршрут
 app.use('/api/worker', require('./routes/workerRoutes')); // Ажилчидтай холбоотой маршрут
+app.use('/api/location', require('./routes/locationRoutes')); // Байршилтай холбоотой маршрут
+app.use('/api/tariff', require('./routes/tariffRoutes')); // Тариффтай холбоотой маршрут
 
 // Серверийн портын тохиргоо
 const PORT = process.env.PORT || 5000; // Орчны хувьсагч эсвэл анхдагч 5000 порт
 
 // Серверийг сонсгох
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`); // Сервер амжилттай ажилласан мессеж
+    console.log(`Server is running on port ${PORT}`.cyan); // Сервер амжилттай ажилласан мессеж
 });
 
 // Sequelize загваруудыг өгөгдлийн сантай синхрончлох
