@@ -19,34 +19,49 @@ function LoginForm() {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
     useEffect(() => {
-        localStorage.clear("token")
-        localStorage.clear("user")
-        // login duudsanl bol logout gj uzne
-        // logout hiih uyd token ustgana    
-    }, [])
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        // Clear token and user data upon visiting login page
+    }, []);
+
     const handleLogin = async () => {
-        console.log("Username:", username);
-        console.log("Password:", password);
+        if (!username || !password) {
+            notification.warning({ message: "Нэвтрэх нэр болон нууц үг шаардлагатай." });
+            return;
+        }
+
+        setLoading(true);
         try {
             const response = await axios.post(`${import.meta.env.VITE_API_URL}/worker/login`, {
-                username: username,
-                password: password
+                username,
+                password,
             });
-            console.log(response);
+
             if (response.data.data && response.data.token) {
-                localStorage.setItem('token', response.data.tokens)
+                localStorage.setItem("token", response.data.token);
                 localStorage.setItem("user", JSON.stringify(response.data.data));
+                notification.success({ message: "Амжилттай нэвтэрлээ." });
                 navigate("/");
             } else {
                 notification.error({ message: "Нэвтрэх нэр эсвэл нууц үг буруу байна!" });
             }
         } catch (error) {
-            console.error('Error fetching clients:', error);
+            // Check for known error codes
+            if (error.response?.data?.code === "ELOGIN" || error.message.includes("Login failed")) {
+                notification.error({ message: "Бүртгэлтэй хандалт алдаа гарлаа. Хэрэглэгчийн мэдээллээ шалгана уу." });
+            } else {
+                notification.error({ message: "Серверийн алдаа гарлаа. Дахин оролдоно уу." });
+            }
+
+            // Log detailed error to console for debugging
+            console.error("Нэвтрэх үед алдаа гарлаа:", error);
         } finally {
             setLoading(false);
         }
     };
+
 
     return (
         <Layout className="container-login">
@@ -54,36 +69,36 @@ function LoginForm() {
                 justify="center"
                 align="middle"
                 style={{
-                    height: "100vh", // Full height of the viewport
+                    height: "100vh",
                     padding: "10px",
                 }}
             >
                 <Col
-                    xs={20}  // Set a smaller width for small devices
-                    sm={18}  // Further adjust for slightly larger screens
-                    md={16}  // Medium-sized screens, still small
-                    lg={12}  // Large screens with a narrower width
-                    xl={10}  // Extra large screens, even more narrow
+                    xs={20}
+                    sm={18}
+                    md={16}
+                    lg={12}
+                    xl={10}
                     style={{
                         padding: "20px",
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "center",
                         background: "#fff",
-                        borderRadius: "8px", // Rounded corners for the form
-                        boxShadow: "0px 4px 10px rgba(0,0,0,0.1)", // Add a subtle shadow
+                        borderRadius: "8px",
+                        boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
                     }}
                 >
                     <div>
                         <img
-                            src="../../public/image.jpg" // Ensure the path is correct
+                            src="/image.jpg" // Adjusted the path for static assets
                             alt="Login Illustration"
                             style={{
                                 width: "100%",
                                 height: "auto",
                                 objectFit: "cover",
-                                maxHeight: "400px", // Limit the height to prevent overflow
-                                borderRadius: "8px", // Optional for rounded corners
+                                maxHeight: "400px",
+                                borderRadius: "8px",
                             }}
                         />
                         <Typography.Title level={2} style={{ textAlign: "center" }}>
@@ -101,7 +116,7 @@ function LoginForm() {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             iconRender={(visible) =>
-                                visible ? <EyeInvisibleOutlined /> : <EyeOutlined />
+                                visible ? <EyeOutlined /> : <EyeInvisibleOutlined />
                             }
                             style={{ marginBottom: "1rem" }}
                         />
@@ -120,17 +135,6 @@ function LoginForm() {
                         >
                             CoSS бүртгэлээр нэвтрэх
                         </Button>
-                    </div>
-                </Col>
-                <Col>
-                    <div
-                        style={{
-                            marginTop: "20px",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                        }}
-                    >
                     </div>
                 </Col>
             </Row>

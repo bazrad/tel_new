@@ -6,9 +6,9 @@ const path = require('path'); // Замын зохицуулалтын сан
 // Өгөгдлийн сангийн тохиргоог JSON объектод тодорхойлох
 const config = {
     DB_USER: "bazrad", // Өгөгдлийн сангийн хэрэглэгчийн нэр
-    DB_PASSWORD: "0210", // Хэрэглэгчийн нууц үг
+    DB_PASSWORD: "1234", // Хэрэглэгчийн нууц үг
     DB_SERVER: "NRP-BAZRAD0210", // Серверийн нэр эсвэл IP хаяг
-    DB_DATABASE: "telephone", // Өгөгдлийн сангийн нэр
+    DB_DATABASE: "telephone", // Өгөгдлийн сангийн нэрY
     DB_PORT: 1433, // MS SQL-д зориулсан портын дугаар
     DB_INSTANCE_NAME: "SQLEXPRESS" // Инстансын нэр
 };
