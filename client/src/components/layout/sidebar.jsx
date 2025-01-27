@@ -76,29 +76,36 @@ const data = {
       url: "#",
       icon: BookOpen,
       items: [
-        { title: "Introduction", url: "#" },
-        { title: "Get Started", url: "#" },
-        { title: "Tutorials", url: "#" },
-        { title: "Changelog", url: "#" },
+        { title: "Ачааллын тайлан", url: "#" },
+        { title: "Бүтэцийн тайлан", url: "#" },
+        { title: "Ярианы тайлан", url: "#" },
+        { title: "Бүтэн тайлан", url: "#" },
       ],
     },
-    {
-      title: "Тохиргоо",
-      url: "#",
-      icon: Settings2,
-      items: [
-        { title: "General", url: "#" },
-        { title: "Team", url: "#" },
-        { title: "Billing", url: "#" },
-        { title: "Limits", url: "#" },
-      ],
-    },
+    // {
+    //   title: "Тохиргоо",
+    //   url: "#",
+    //   icon: Settings2,
+    //   items: [
+    //     { title: "General", url: "#" },
+    //     { title: "Team", url: "#" },
+    //     { title: "Billing", url: "#" },
+    //     { title: "Limits", url: "#" },
+    //   ],
+    // },
   ],
-  projects: [
-    { name: "Касс", url: "#", icon: Frame },
-    { name: "Бүртгэл", url: "#", icon: PieChart },
-    { name: "Аялал", url: "#", icon: Map },
-  ],
+
+
+
+
+  // projects: [
+  //   { name: "Касс", url: "#", icon: Frame },
+  //   { name: "Бүртгэл", url: "#", icon: PieChart },
+  //   { name: "Аялал", url: "#", icon: Map },
+  // ],
+
+
+
   basename: "/login",
 };
 
@@ -110,7 +117,9 @@ const TeleSidebar = ({ ...props }) => {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+
+        {/* <NavProjects projects={data.projects} /> */}
+
       </SidebarContent>
       <SidebarFooter>
         {/* Add footer content if needed */}
