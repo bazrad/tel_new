@@ -197,16 +197,64 @@ const Clients = () => {
               }
               options={[
                 {
-                  label: <span>manager</span>,
-                  title: 'manager',
+                  label: <span>Хэрэглэгчийн авч болох дугаар</span>,
+                  title: 'Хэрэглэгчийн дугаар',
                   options: [
-                    { value: "880011", label: "880011", },
-                    { value: "990022", label: "990022" },
+
+                    { value: "4492", label: "4492" },
+                    { value: "40023", label: "40023" },
+                    { value: "40033", label: "40033" },
+                    { value: "40346", label: "40346" },
+                    { value: "40643", label: "40643" },
+                    { value: "40646", label: "40646" },
+                    { value: "41163", label: "41163" },
+                    { value: "41168", label: "41168" },
+                    { value: "41186", label: "41186" },
+                    { value: "41187", label: "41187" },
+                    { value: "41196", label: "41196" },
+                    { value: "41205", label: "41205" },
+                    { value: "41246", label: "41246" },
+                    { value: "42100", label: "42100" },
+                    { value: "42101", label: "42101" },
+                    { value: "42104", label: "42104" },
+                    { value: "42105", label: "42105" },
+                    { value: "42106", label: "42106" },
+                    { value: "42107", label: "42107" },
+                    { value: "42111", label: "42111" },
+                    { value: "42113", label: "42113" },
+                    { value: "42114", label: "42114" },
+                    { value: "42120", label: "42120" },
+                    { value: "42122", label: "42122" },
+                    { value: "42123", label: "42123" },
+                    { value: "42125", label: "42125" },
+                    { value: "42126", label: "42126" },
+                    { value: "42127", label: "42127" },
+                    { value: "42130", label: "42130" },
+                    { value: "42131", label: "42131" },
+                    { value: "42132", label: "42132" },
+                    { value: "42133", label: "42133" },
+                    { value: "42141", label: "42141" },
+                    { value: "42153", label: "42153" },
+                    { value: "42160", label: "42160" },
+                    { value: "42162", label: "42162" },
+                    { value: "42195", label: "42195" },
+                    { value: "42523", label: "42523" },
+                    { value: "42554", label: "42554" },
+                    { value: "42653", label: "42653" },
+                    { value: "42671", label: "42671" },
+                    { value: "42722", label: "42722" },
+                    { value: "41107", label: "41107" },
+                    { value: "43502", label: "43502" },
+                    { value: "43503", label: "43503" },
+                    { value: "40803", label: "40803" },
+                    { value: "4447", label: "4447" },
+                    { value: "4490", label: "4490" },
+                    { value: "43750", label: "43750" },
+                    { value: "44004", label: "44004" },
                   ],
                 },
-                { value: "990022", label: "990022" },
-                { value: "990044", label: "990044" },
               ]}
+
             />
           </Form.Item>
           <Form.Item
@@ -225,10 +273,36 @@ const Clients = () => {
                 (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
               }
               options={[
-                { value: "Улаанбаатар", label: "Улаанбаатар" },
-                { value: "Дархан", label: "Дархан" },
-                { value: "Эрдэнэт", label: "Эрдэнэт" },
+                {
+                  label: <span>Хаягууд</span>,
+                  title: 'Хаяг',
+                  options: [
+                    { value: "Хойд", label: "Хойд" },
+                    { value: "Дулаан", label: "Дулаан" },
+                    { value: "Сүхбаатар", label: "Сүхбаатар" },
+                    { value: "Ерөө", label: "Ерөө" },
+                    { value: "Дархан", label: "Дархан" },
+                    { value: "Дархан-2", label: "Дархан-2" },
+                    { value: "Орхон", label: "Орхон" },
+                    { value: "Баруунхараа", label: "Баруунхараа" },
+                    { value: "Эрхэт", label: "Эрхэт" },
+                    { value: "Цайдам", label: "Цайдам" },
+                    { value: "Энхтал", label: "Энхтал" },
+                    { value: "Салхит", label: "Салхит" },
+                    { value: "Хөтөл", label: "Хөтөл" },
+                    { value: "Улаантолгой", label: "Улаантолгой" },
+                    { value: "Эрдэнэт", label: "Эрдэнэт" },
+                    { value: "Хангал", label: "Хангал" },
+                    { value: "Орхонтуул", label: "Орхонтуул" },
+                    { value: "Бэлэндалай", label: "Бэлэндалай" },
+                    { value: "Зүүнхараа", label: "Зүүнхараа" },
+                    { value: "Бэрх", label: "Бэрх" },
+                    { value: "Үнэгт", label: "Үнэгт" },
+                    { value: "Түнх", label: "Түнх" },
+                  ],
+                },
               ]}
+
             />
           </Form.Item>
           <Form.Item>

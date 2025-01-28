@@ -18,7 +18,6 @@ module.exports = function (sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'division',
-    schema: 'bazrad',
     timestamps: false,
     indexes: [
       {

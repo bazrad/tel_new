@@ -18,7 +18,6 @@ module.exports = function (sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'nrptest',
-    schema: 'bazrad',
     timestamps: false
   });
 };

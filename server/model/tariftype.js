@@ -14,7 +14,6 @@ module.exports = function (sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'tariftype',
-    schema: 'bazrad',
     timestamps: false,
     indexes: [
       {

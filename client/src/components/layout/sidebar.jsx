@@ -58,7 +58,7 @@ const data = {
         { title: "Ярианы дүн", url: "tariff" },
         { title: "Цэнэглэлт", url: "/payment" },
         { title: "Цэнэглэлт бүртгэл", url: "history" },
-        { title: "Турших", url: "example" },
+        // { title: "Турших", url: "example" },
       ],
     },
     {
@@ -95,9 +95,6 @@ const data = {
     // },
   ],
 
-
-
-
   // projects: [
   //   { name: "Касс", url: "#", icon: Frame },
   //   { name: "Бүртгэл", url: "#", icon: PieChart },
@@ -106,7 +103,7 @@ const data = {
 
 
 
-  basename: "/login",
+  basename: "/",
 };
 
 const TeleSidebar = ({ ...props }) => {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Card, Modal, Button, Form, Input, Select, message, Upload, notification } from 'antd';
 import axios from 'axios';
-import { FileTextOutlined, PhoneOutlined } from '@ant-design/icons';
+import { FileTextOutlined, PhoneOutlined, CalculatorOutlined } from '@ant-design/icons';
 import AddCallModal from '../modal/addCall';
 import dayjs from 'dayjs';
 import currencyFormat from '@/helpers/currencyFormat';
@@ -166,7 +166,7 @@ const Call = () => {
 
   return (
     <Card title="Дуудлагын мэдээллүүд">
-      <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-start', flexDirection: 'row' }}>
+      <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-start', flexDirection: 'row', marginBottom: '10px' }}>
         <Button
           className="bg-green-400"
           type="primary"
@@ -191,18 +191,16 @@ const Call = () => {
           </Button>
         </Upload>
 
-
-
         <Button
           className="bg-green-400"
           type="primary"
           onClick={() => calculateTariff()}
-          icon={<FileTextOutlined />}
+          icon={<CalculatorOutlined />
+          }
+          style={{ marginLeft: 'auto' }} // Add margin-left:auto to push the button to the end of the container
         >
           Бодолт хийх
         </Button>
-
-
       </div>
       <Table
         columns={columns}

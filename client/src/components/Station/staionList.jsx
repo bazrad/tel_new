@@ -214,7 +214,7 @@ const Stations = () => {
                 pagination={{
                     ...tableParams.pagination,
                     locale: {
-                        items_per_page: 'хуудас', // Зөвлөгөө: "item_per_page" биш, "items_per_page" ашиглана.
+                        items_per_page: 'хуудас',
                     },
                 }}
                 size="small"

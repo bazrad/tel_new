@@ -30,7 +30,6 @@ module.exports = function (sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'call',
-    schema: 'bazrad',
     timestamps: false,
     indexes: [
       {

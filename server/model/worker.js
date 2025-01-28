@@ -29,7 +29,6 @@ module.exports = function (sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'worker',
-    schema: 'bazrad',
     timestamps: false,
     indexes: [
       {

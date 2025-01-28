@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   return sequelize.define('Payments', {
     phoneNumber: {
       type: DataTypes.CHAR(10),
@@ -16,7 +16,6 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'Payments',
-    schema: 'bazrad',
     timestamps: false
   });
 };

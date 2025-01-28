@@ -22,7 +22,6 @@ module.exports = function (sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'device',
-    schema: 'bazrad',
     timestamps: false,
     indexes: [
       {
