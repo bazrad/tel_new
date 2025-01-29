@@ -6,6 +6,12 @@ const injectDB = require('./middleware/injectDB'); // Өгөгдлийн сан�
 const db = require('./seq_db'); // Sequelize-ийн өгөгдлийн сангийн тохиргоо
 const colors = require('colors'); // Терминалд өнгө өгөх
 
+const fs = require('fs'); // Файл унших, бичих
+const path = require('path'); // Замын файлын замыг тохируулах
+const rfs = require('rotating-file-stream'); // Лог файлыг өөрчлөх
+const morgan = require('morgan'); // HTTP запросын логуудыг харуулах
+const logger = require('./middleware/logger'); // Логуудыг харуулах middleware
+
 
 console.log("Сервер аслаа !!! ".green); // Терминалд өнгө өгөх
 
@@ -13,23 +19,20 @@ console.log("Сервер аслаа !!! ".green); // Терминалд өнг�
 
 dotenv.config(); // Орчны хувьсагчдыг `.env` файлд тохируулах
 
+var accessLogStream = rfs.createStream('access.log', {
+    interval: '1d', // rotate daily
+    path: path.join(__dirname, 'log')
+});
+
 const app = express(); // Express сервер үүсгэх
 
 // Middleware ашиглах
+app.use(logger); // Логуудыг харуулах
+app.use(morgan('combined', { stream: accessLogStream })); // HTTP запросын логуудыг харуулах
 app.use(cors()); // CORS-г зөвшөөрөх
 app.use(express.json()); // JSON хэлбэрийн өгөгдлийг боловсруулах
 app.use(injectDB(db));  // Sequelize MSSQL холбогдсон өгөгдлийн санг middleware-д нэмэх
 
-// Өгөгдлийн сангийн холболтыг сервер асаах үед шалгах
-// (async () => {
-//     try {
-//         await connectDB();
-//         console.log('Database connection pool established');
-//     } catch (err) {
-//         console.error('Failed to establish database connection pool:', err);
-//         process.exit(1);
-//     }
-// })();
 
 // Замуудыг тохируулах
 app.use('/api/payment', require('./routes/paymentRoutes')); // Төлбөртэй холбоотой маршрут

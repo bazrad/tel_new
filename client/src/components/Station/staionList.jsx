@@ -100,12 +100,12 @@ const Stations = () => {
 
     const columns = [
         { title: '№', dataIndex: 'number', key: 'number', render: (_text, _record, index) => index + 1, },
-        { title: 'ID', dataIndex: 'id', key: 'id' },
-        { title: 'БҮСИЙН ДУГААР', dataIndex: 'zone_number', key: 'zone_number' },
         { title: 'БҮСИЙН НЭР', dataIndex: 'zone_name', key: 'zone_name' },
         { title: 'СТАНЦЫН НЭР', dataIndex: 'name', key: 'name' },
+        { title: 'БҮСИЙН ДУГААР', dataIndex: 'zone_number', key: 'zone_number' },
         { title: 'ТРАНК(ХОЛБОХ ШУГАМУУД)', dataIndex: 'trunk_lines', key: 'trunk_lines' },
         { title: 'БАГТААМЖ', dataIndex: 'capacity', key: 'capacity' },
+        { title: 'ID', dataIndex: 'id', key: 'id' },
         {
             title: 'Үйлдэл',
             key: 'action',
