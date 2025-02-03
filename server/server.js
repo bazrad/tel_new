@@ -65,8 +65,8 @@ db.sequelize.sync()
 // Sequelize холбоосуудыг тодорхойлох
 // "call" хүснэгт "phone" хүснэгттэй холбоотой байх
 // "number_id_in" болон "number_id_out" гадаад түлхүүр ашиглах
-db.call.belongsTo(db.phone, { foreignKey: 'number_id_in', as: 'number_in' });
-db.call.belongsTo(db.phone, { foreignKey: 'number_id_out', as: 'number_out' });
+// db.call.belongsTo(db.phone, { foreignKey: 'number_id_in', as: 'number_in' });
+// db.call.belongsTo(db.phone, { foreignKey: 'number_id_out', as: 'number_out' });
 
 // "client" болон "phone" хүснэгтүүдийн хооронд олон-олон харьцааг тодорхойлох
 // "client_phone" дамжуулагч хүснэгт ашиглах

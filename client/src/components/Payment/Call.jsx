@@ -14,39 +14,53 @@ const Call = () => {
   const [fileList, setFileList] = useState([]);
 
   const columns = [
+    { title: '№', dataIndex: 'number', key: 'number', render: (_text, _record, index) => index + 1 },
     {
       title: 'Дуудлага хийсэн',
-      dataIndex: 'number_in',
-      key: 'number_in',
-      render: e => e.phone_number
+      dataIndex: 'caller',
+      key: 'caller',
     },
     {
       title: 'Дуудлага хүлээн авсан',
-      dataIndex: 'number_out',
-      key: 'number_out',
-      render: e => e.phone_number
+      dataIndex: 'called',
+      key: 'called',
+    },
+    {
+      title: 'Дуудлагын хугацаа (сек)',
+      dataIndex: 'duration',
+      key: 'duration',
     },
     {
       title: 'Эхэлсэн хугацаа',
       dataIndex: 'duration_start',
       key: 'duration_start',
-      render: e => dayjs(e).format('YYYY-MM-DD HH:mm:ss')
+      render: e => dayjs(e).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
       title: 'Дууссан хугацаа',
       dataIndex: 'duration_end',
       key: 'duration_end',
-      render: e => dayjs(e).format('YYYY-MM-DD HH:mm:ss')
-    },
-    {
-      title: 'Гарсан транк',
-      dataIndex: 'out_trunk',
-      key: 'out_trunk',
+      render: e => dayjs(e).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
       title: 'Орсон транк',
-      dataIndex: 'in_trunk',
-      key: 'in_trunk',
+      dataIndex: 'incomingTrunk',
+      key: 'incomingTrunk',
+    },
+    {
+      title: 'Гарсан транк',
+      dataIndex: 'outgoingTrunk',
+      key: 'outgoingTrunk',
+    },
+    {
+      title: 'Холбогдох дугаар',
+      dataIndex: 'linkNumber',
+      key: 'linkNumber',
+    },
+    {
+      title: 'Үйлчилгээг хангах',
+      dataIndex: 'bearerServices',
+      key: 'bearerServices',
     },
     {
       title: 'Тариф',
@@ -57,10 +71,12 @@ const Call = () => {
       title: 'Дүн',
       dataIndex: 'amount',
       key: 'amount',
-    },
+      render: (amount) => <strong>{amount}</strong>, // Дүн-г bold болгох
 
+    },
   ];
-  1
+
+
 
 
   const tariff = [
@@ -95,53 +111,62 @@ const Call = () => {
   console.log(calls);
   const closeAddCall = () => { setAddCall(false) }
   const showAddCall = () => { setAddCall(true) }
+
+
   const handleFileUpload = (file) => {
     const reader = new FileReader();
-
     reader.onload = async () => {
-      // Get file content
       const fileContent = reader.result;
 
-      // Split content by new lines (\n) and filter out empty lines
       const lineArray = fileContent.split(/\r?\n/).filter(Boolean);
 
-      // Update the state with the extracted lines
-      console.log(lineArray);
-      const data = lineArray.map(line => {
-        const words = line.replaceAll('  ', ' ').split(" ")
-        var date1 = words[2].split('_')
-        var date2 = words[3].split('_')
-        var obj = {
-          phone1: words[0],
-          phone2: words[1],
-          start: new Date(date1[0] + ' ' + date1[1]),
-          end: new Date(date2[0] + ' ' + date2[1]),
-        }
-        return obj
-      })
-      var succ = 0
+      const data = lineArray.slice(1).map(line => {
+        const words = line.replace(/\s+/g, ' ').trim().split(" ");
+
+        return {
+          caller: words[0],
+          called: words[1],
+          duration: parseFloat(words[2]),
+          start: new Date(words[3] + ' ' + words[4]),
+          end: new Date(words[5] + ' ' + words[6]),
+          incomingTrunk: words[7],
+          outgoingTrunk: words[8],
+          linkNumber: words[9] || "N/A",
+          bearerServices: words[10] || "N/A",
+        };
+      });
+
+      let successCount = 0;
       for await (const call of data) {
-        const res = await axios.post(`${import.meta.env.VITE_API_URL}/call`, call)
-        if (res) succ++
+        try {
+          const res = await axios.post(`${import.meta.env.VITE_API_URL}/call`, call);
+          if (res.status === 200) successCount++;
+        } catch (error) {
+          console.error("Error uploading call record:", error);
+        }
       }
 
-      if (succ === data.length) {
+      if (successCount === data.length) {
         notification.success({ message: "Амжилттай бүртгэгдлээ" });
-        console.log(`calls`, calls);
         getCalls();
-
       }
+
       message.success(`${file.name} амжилттай татлаа!`);
     };
-    console.log(`calls`, calls);
+
     reader.onerror = () => {
       message.error("Error reading the file");
     };
+
     // Read the file as text
     reader.readAsText(file);
-    // Return false to prevent the default behavior of the Upload component (uploading the file itself)
     return false;
   };
+
+
+
+
+
 
   const calculateTariff = () => {
     const ika = calls.map(call => {
@@ -206,6 +231,7 @@ const Call = () => {
         columns={columns}
         dataSource={calls}
         loading={loading}
+
         rowKey="id"
       />
       {addCall && <AddCallModal open={addCall} close={closeAddCall} refresh={getCalls} />}
